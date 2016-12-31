@@ -1,0 +1,46 @@
+
+ul,li{ list-style: none;}
+
+.head{ height: 50px;}
+.foter{ height: 100px;}
+.mainpage-left{
+  li{ line-height: 35px;}
+}
+
+.pagebox{ padding-right:15px;
+  .childCol{
+    .colMessage{ padding-left: 30px;}
+  }
+}
+
+.addCol{
+  .addCol_tap_con{ border: 1px solid #ddd; width: 100%; border-top:0px; height: 100%;
+    .row{ border-bottom: 1px solid #ddd; padding: 10px 0px;}
+  }
+  .addCol_tap_0,.addCol_tap_1,.addCol_tap_2{ padding: 15px;}
+  .addCol_con_btn{ padding-left: 15px; padding-bottom: 15px;}
+}
+
+.addArticle{
+  .addArticle_tap_con{ border: 1px solid #ddd; width: 100%; border-top:0px; height: 100%;
+    .row{ border-bottom: 1px solid #ddd; padding: 10px 0px;}
+  }
+  .addArticle_tap_0,.addArticle_tap_1,.addArticle_tap_2{ padding: 15px;}
+  .addArticle_con_btn{ padding-left: 15px; padding-bottom: 15px;}
+}
+
+.addManager{
+  .addform{ width: 100%;  height: 100%;
+    .row{ border-bottom: 1px solid #ddd; padding: 10px 0px;}
+  }
+}
+.addManagerGroup{
+  .addmang{
+    width: 100%;  height: 100%;
+    .row{ border-bottom: 1px solid #ddd; padding: 10px 0px;}
+  }
+}
+
+.nav-tabs{
+  li,a{ cursor: pointer;}
+}

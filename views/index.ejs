@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="cache-control" content="no-cache">
+  <title>首页</title>
+  <link rel="stylesheet" href="/lib/bootstrap-3.3/css/bootstrap.css">
+  <script src="/lib/jquery/jquery-3.1.1.js"></script>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+<div class="head">网站cms</div>
+<div class="body">
+  <div id="BODYMAIN">
+    <router-view></router-view>
+  </div>
+</div>
+<div class="foter"></div>
+<script>
+  var d = document.getElementsByClassName('row');
+  for(var i=0;i< d.length;i++){
+    d[i].style.display="block"
+  }
+
+//  <li><a href="/admin/manage/columnList">网站栏目管理</a></li>
+//          <li><a href="/admin/manage/alldocList">所有档案列表</a></li>
+//          <li><a href="/admin/manage/mydocList">我发布的文档</a></li>
+//          <li><a href="/admin/manage/groupList">系统用户组</a></li>
+//          <li><a href="/admin/manage/managersList">管理员列表</a></li>
+//          <li><a href="/admin/manage/sysCfg">系统参数</a></li>
+
+  function changerouter(_url){
+    var state = {
+      title: 'aaaaa',
+      url: _url
+    };
+    window.history.pushState(state, document.title, _url);
+   // window.history.forward(_url)
+  }
+
+  window.addEventListener('popstate', function(e){
+    if (history.state){
+      var state = e.state;
+      //do something(state.url, state.title);
+    }
+  }, false);
+  var obj = {
+    colname: 'ppppp',
+    colname2: 'ppppp',
+    coltype: 'ppppppp',
+    description: 'cccc',
+    keywords: '111bbbb',
+    seotitle: '',
+    colprop: '',
+    rank: '',
+    colrule: '',
+    content: '',
+    colid: 'Sy84vK1Se'
+    //parentId:'rkXhUY1rg'
+  }
+//  $.post('http://localhost:3000/api/addTopCol',obj,function(_d){
+//      console.log(_d)
+//    }) //rkXhUY1rg
+//  $.post('http://localhost:3000/api/addChildCol',obj,function(_d){
+//    console.log(_d)
+//  })
+//  $.post('http://localhost:3000/api/updateCol',obj,function(_d){
+//    console.log(_d)
+//  })
+</script>
+
+
+<script src="/js/app.js"></script>
+</body>
+</html>
