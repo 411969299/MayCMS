@@ -181,7 +181,8 @@ export default {
       seotitle:'',
       keywords:'',
       description:'',
-      content:''
+      content:'',
+      colid:0
     }
   },methods:{
     changeView:function(_dom){
@@ -189,8 +190,8 @@ export default {
     },
     submitData:function(){
       //Message.success({message:'操作成功'})
-      console.log(this.$route.query)
       var pid = this.$route.query.parentId
+      var type  = this.$route.query.type;
       var posturl = ''
       var obj = {
         coltype:this.coltype,
@@ -204,10 +205,14 @@ export default {
         description:this.description,
         content:this.content
       }
-      if(pid && pid!=''){
+
+      if(type && type=='addChildCol'){  //添加子类
         obj.parentId = pid
         posturl = 'api/addChildCol'
-      }else{
+      }else if(type && type=='updateCol'){  //修改当前栏目
+        posturl = 'api/updateCol'
+        obj.colid = this.colid
+      }else{  //增加新的顶级栏目
         posturl = 'api/addTopCol'
       }
 
@@ -226,6 +231,24 @@ export default {
     currViewIndex:function(){
       return this.cvi
     }
+  },
+created:function (){
+
+  var type = this.$route.query.type
+  if(type && type == 'updateCol'){
+    var d = this.$route.query.coldata;
+    this.colid = d.colid
+    this.coltype = d.coltype,
+      this.colname = d.colname,
+      this.rank = d.rank,
+      this.colrule = d.colrule,
+      this.colpath = d.colpath,
+      this.colprop = d.colprop,
+      this.seotitle = d.seotitle,
+      this.keywords = d.keywords,
+      this.description = d.description,
+      this.content = d.content
   }
+}
 }
 </script>

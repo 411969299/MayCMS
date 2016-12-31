@@ -21,7 +21,7 @@
                   </tr>
                   <tr v-for="cldkey in key.childCol" v-bind="{'data-parentId':key.colid}"  class="childCol">
                     <td><div class="pull-left colMessage" style="padding-left: 30px;"><input type="checkbox">{{cldkey.colname}}[id:{{cldkey.colid}}](文档：...)</div>
-                      <div class="pull-right colOperate"><a @click="updateColFun(cldkey.colid)">更改</a> | <a  @click="previewFun(cldkey.colid)">预览</a> | <a
+                      <div class="pull-right colOperate"><a @click="updateColFun(key.colid,cldkey.colid)">更改</a> | <a  @click="previewFun(cldkey.colid)">预览</a> | <a
                         @click="deleteColFun(cldkey.colid,key.colid)">删除</a></div></td>
                   </tr>
 
@@ -52,11 +52,29 @@ export default {
       //this.showStore = _d
       // v-show="showStore == key.colid"
     },
-    updateColFun:function(_id){
-      console.log(_id)
+    updateColFun:function(_pid,_id){  //第一个父id，第二个子id
+      var obj = null
+      this.collist.some(function(d,i){
+        if(d.colid == _pid ){
+          if(_id && _id!=''){
+            return d.childCol.some(function(sd){
+              if(sd.colid == _id){
+                obj = sd
+                return !0
+              }
+            })
+          }else{
+            obj = d
+            return !0
+          }
+        }
+      })
+      console.log(obj)
+      this.$router.push({name:'columnAdd',query:{coldata:obj,type:'updateCol'}})
     },
     addChildColFun:function(_id){  //增加子类
-      this.$router.push({name:'columnAdd',params:{parentId:_id}})
+
+      this.$router.push({name:'columnAdd',query:{parentId:_id,type:'addChildCol'}})
 
     },
     deleteColFun:function(_id,_pid){
