@@ -1,22 +1,43 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as actions from './actions'
-import * as getters from './getters'
-import cart from './modules/cart'
-import products from './modules/products'
-import createLogger from '../../../src/plugins/logger'
 
 Vue.use(Vuex)
 
-const debug = process.env.NODE_ENV !== 'production'
+var $ = require('jquery')
+import root from '../setting';
+
+import * as types from './mutation-types'
+
+
+const state = {
+  columnListData: []
+}
+
+// getters
+const getters = {
+  getcolumnList: state => state.columnListData
+}
+
+// actions
+const actions = {
+  getData ({ commit, state }) {
+    commit(types.COLUMN_LIST_DATA)
+  }
+}
+
+// mutations
+const mutations = {
+  [types.COLUMN_LIST_DATA] (state) {
+    $.get(root.baseurl + 'api/column/getCol',{},function(_d){
+      state.columnListData = _d.data
+    })
+  }
+}
+
 
 export default new Vuex.Store({
   actions,
   getters,
-  modules: {
-    cart,
-    products
-  },
-  strict: debug,
-  plugins: debug ? [createLogger()] : []
+  state,
+  mutations
 })

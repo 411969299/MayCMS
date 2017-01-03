@@ -1,12 +1,8 @@
 
-var cfg = require('./config')
-
 var mongoose = require('mongoose');
 var async = require('async');
 //var ShortId = require('mongoose-shortid');
-
-mongoose.connect(cfg.URL);
-var db = mongoose.connection;
+var db = require('./index');
 
 var colSchema = mongoose.Schema({
     colid: {type:String,default:'0'},

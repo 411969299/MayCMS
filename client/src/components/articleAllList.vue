@@ -4,7 +4,7 @@
             <div class="alldocumentlist">
               <div class="pbhead clearfix">
                 <div class="col-md-6 col-md-offset-3">
-                  <div class="btn btn-default">添加文档</div>
+                  <div @click="changeUrl('articleAdd')" class="btn btn-default">添加文档</div>
                   <div class="btn btn-default">我的文档</div>
                   <div class="btn btn-default">审核稿件</div>
                   <div class="btn btn-default">文档回收站</div>
@@ -31,7 +31,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+
+                <tr v-for="key in artlist">
                   <td>1</td>
                   <td><input type="checkbox"></td>
                   <td>文章标题文章标题文章标题</td>
@@ -125,7 +126,7 @@
             </div>
 
           </div>
-          
+
 </template>
 
 <script>
@@ -134,7 +135,12 @@ export default {
   name: 'articleAllList',
   data () {
     return {
-
+      artlist:[]
+    }
+  },
+  methods: {
+    changeUrl: function (_name) {
+      this.$router.push({name: _name})
     }
   }
 }

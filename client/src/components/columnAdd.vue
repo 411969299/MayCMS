@@ -1,6 +1,4 @@
-<style>
 
-</style>
 <template>
   <!-- 增加栏目 -->
           <div class="row">
@@ -208,12 +206,12 @@ export default {
 
       if(type && type=='addChildCol'){  //添加子类
         obj.parentId = pid
-        posturl = 'api/addChildCol'
+        posturl = 'api/column/addChildCol'
       }else if(type && type=='updateCol'){  //修改当前栏目
-        posturl = 'api/updateCol'
+        posturl = 'api/column/updateCol'
         obj.colid = this.colid
       }else{  //增加新的顶级栏目
-        posturl = 'api/addTopCol'
+        posturl = 'api/column/addTopCol'
       }
 
       $.post(root.baseurl+posturl,obj,(res) =>{

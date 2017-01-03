@@ -35,6 +35,8 @@
 
 <script>
   import root from '../setting';
+  import * as types from '../store/mutation-types'
+
   var $ = require('jquery')
 export default {
   name: 'columnList',
@@ -69,7 +71,7 @@ export default {
           }
         }
       })
-      console.log(obj)
+      //console.log(obj)
       this.$router.push({name:'columnAdd',query:{coldata:obj,type:'updateCol'}})
     },
     addChildColFun:function(_id){  //增加子类
@@ -83,8 +85,8 @@ export default {
         colid:_id
       }
       var _this = this
-      $.post(root.baseurl + 'api/deleteCol',obj,function(_d){
-        _this.collist.some(function(d,i){
+      $.post(root.baseurl + 'api/column/deleteCol',obj,function(_d){
+        _this.collist.some(function(d,i){  //随后要放到vuex中 用action替代
           if(_pid){  //父ID
             if(d.colid == _pid){   //找到对应的父id
               return d.childCol.some(function(cd,ci){
@@ -112,14 +114,19 @@ export default {
 
   },
   computed:{
+    collist () {
+      return this.$store.getters.getcolumnList
+    }
   },
-  created:function(){
-    this.$http.get(root.baseurl+'api/getCol').then((res) => {
-      this.collist = res.data.data
-      //console.log(res.data.data)
-  }, (res) => {
-      console.log(res.data.msg)
-    })
+  created:function(){ /// 需要判断数据是否为空
+//    this.$http.get(root.baseurl+'api/getCol').then((res) => {
+//      this.collist = res.data.data
+//      //console.log(res.data.data)
+//  }, (res) => {
+//      console.log(res.data.msg)
+//    })
+console.log(this.$store)
+    this.$store.dispatch('getData')
   }
 }
 </script>
