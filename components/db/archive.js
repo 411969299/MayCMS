@@ -1,13 +1,10 @@
 
-
-
-var mongoose = require('mongoose');
 var async = require('async');
 //var ShortId = require('mongoose-shortid');
 var db = require('./index');
 
 
-var artSchema = mongoose.Schema({
+var artSchema = db.Schema({
     artid: {type:String,default:'0'},
     title:String,
     shorttitle: String,
@@ -30,7 +27,7 @@ var artSchema = mongoose.Schema({
     updated: { type: Date, default: Date.now }
 })
 
-var artModel  =mongoose.model('article', artSchema)
+var artModel  =db.model('article', artSchema)
 
 
 
@@ -45,13 +42,13 @@ function addArticle(_o,cb){
 }
 
 function deletecol(_o,cb){
-    //columnModel.remove({ $or: [ {colid:_o}, {parentId:_o} ] },function(err, result){
-    //    if (err) {
-    //        return cb(err);
-    //    } else {
-    //        return cb(null, result);
-    //    }
-    //})
+    artModel.remove(_o,function(err, result){
+        if (err) {
+            return cb(err);
+        } else {
+            return cb(null, result);
+        }
+    })
 }
 
 function updatecol(_old,_new,cb){
@@ -59,8 +56,22 @@ function updatecol(_old,_new,cb){
 }
 
 function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
-
+    var query = {}
+    if(_o){
+        query = _o
+    }
+    artModel.find(query,function (err, o) {
+        if (err){
+            return cb(err);
+        }else{
+            if(o && o.length && o.length > 0){
+                return cb(null,o);
+            }else{
+                return cb('没有数据');
+            }
+        }
+    })
 }
 module.exports = {
-    addArticle,getallArt
+    addArticle,getallArt,deletecol,updatecol
 }

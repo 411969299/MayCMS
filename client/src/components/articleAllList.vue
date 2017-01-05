@@ -33,52 +33,17 @@
                 <tbody>
 
                 <tr v-for="key in artlist">
-                  <td>1</td>
+                  <td>{{key.artid}}</td>
                   <td><input type="checkbox"></td>
-                  <td>文章标题文章标题文章标题</td>
-                  <td>1999-9-9</td>
-                  <td>所属栏目所属栏目</td>
-                  <td>1111</td>
+                  <td>{{key.title}}</td>
+                  <td>{{key.updated}}</td>
+                  <td>{{key.columnName}}</td>
+                  <td>{{key.click}}</td>
                   <td>权限权限</td>
-                  <td>admin</td>
-                  <td><a href="">编辑</a>|<a href="">删除</a>|<a href="">预览</a></td>
+                  <td>{{key.writer}}</td>
+                  <td><a  @click="updataArtFun(key.artid)">编辑</a> | <a @click="deleteArtFun(key.artid)">删除</a> | <a href="">预览</a></td>
                 </tr>
 
-                <tr>
-                  <td>1</td>
-                  <td><input type="checkbox"></td>
-                  <td>文章标题文章标题文章标题</td>
-                  <td>1999-9-9</td>
-                  <td>所属栏目所属栏目</td>
-                  <td>1111</td>
-                  <td>权限权限</td>
-                  <td>admin</td>
-                  <td><a href="">编辑</a>|<a href="">删除</a>|<a href="">预览</a></td>
-                </tr>
-
-                <tr>
-                  <td>1</td>
-                  <td><input type="checkbox"></td>
-                  <td>文章标题文章标题文章标题</td>
-                  <td>1999-9-9</td>
-                  <td>所属栏目所属栏目</td>
-                  <td>1111</td>
-                  <td>权限权限</td>
-                  <td>admin</td>
-                  <td><a href="">编辑</a>|<a href="">删除</a>|<a href="">预览</a></td>
-                </tr>
-
-                <tr>
-                  <td>1</td>
-                  <td><input type="checkbox"></td>
-                  <td>文章标题文章标题文章标题</td>
-                  <td>1999-9-9</td>
-                  <td>所属栏目所属栏目</td>
-                  <td>1111</td>
-                  <td>权限权限</td>
-                  <td>admin</td>
-                  <td><a href="">编辑</a>|<a href="">删除</a>|<a href="">预览</a></td>
-                </tr>
                 </tbody>
               </table>
               <div class="adl_crl">
@@ -103,9 +68,10 @@
                   <div class="form-group">
                     <label for="" class="col-sm-2 control-label">选择栏目</label>
                     <div class="col-sm-2">
-                      <select name="" id="">
-                        <option value="1">栏目11111111111111111111111111111</option>
-                        <option value="1">栏目</option>
+                      <select name="" id="" class="form-control" >
+                        <option v-for="option in collist" :value="option.value">
+                          {{ option.title }}
+                        </option>
                       </select>
                     </div>
                     <label for="" class="col-sm-2 control-label">关键字</label>
@@ -130,18 +96,36 @@
 </template>
 
 <script>
-
+  import * as types from '../store/mutation-types'
 export default {
   name: 'articleAllList',
   data () {
     return {
-      artlist:[]
+
     }
   },
   methods: {
-    changeUrl: function (_name) {
+    ['changeUrl']: function (_name) {
       this.$router.push({name: _name})
+    },
+    ['deleteArtFun'](_artid){
+      this.$store.dispatch('deleteArt',{artid:_artid})
+    },
+    ['updataArtFun'](_artid){
+      this.$router.push({ name: 'articleAdd', params: { userId: 123 }})
     }
+
+  },
+  computed:{
+    artlist () {
+      return this.$store.getters.getartList
+    },
+    collist(){
+      return this.$store.getters.getconvercol
+    }
+  },
+  created:function(){
+    this.$store.dispatch('artlistData',{})  //"artid":"BJ_MJNore"
   }
 }
 </script>

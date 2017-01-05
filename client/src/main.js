@@ -4,14 +4,16 @@ import Vue from 'vue'
 //import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './router/'
+import * as filters from './filters'
 
 import resource from 'vue-resource'
 import 'element-ui/lib/theme-default/index.css'
 Vue.use(VueRouter)
 Vue.use(resource)
 
-Vue.filter('collist-select', function (value) {  // 改为循环注册
-  return 1
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
 })
 
 import store from './store/'

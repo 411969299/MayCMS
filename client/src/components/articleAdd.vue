@@ -91,9 +91,9 @@
                   <div class="row">
                     <div class="col-md-1">文章主栏目</div>
                     <div class="col-md-2">
-                      <select name="" id="" class="form-control"  v-model="columnName"><!--multiple-->
-                        <option v-for="option in selectdata"  :value="option.value">
-                          {{ option.text }}
+                      <select name="" id="" class="form-control"  v-model="columnId"><!--multiple-->
+                        <option v-for="option in collist" :value="option.value">
+                          {{ option.title }}
                         </option>
                       </select>
                     </div>
@@ -187,17 +187,13 @@ export default {
       source: '',  //来源
       flag: [],  //自定义属性// ['h','c','f','a','s','b','p','j']
       rank: '',
-      tag: [''],
+      tag: '',
       click: '',  //点击量
       columnName: '',
       content:'',
       goodpost: 0,  //点赞数
       badpost: 0,  //非点赞数
-      channel:'',  //所属栏目ID
-      selectdata:[
-        { text: 'A', value: 'a' },
-        { text: 'B', value: 'b' }
-      ]
+      columnId:''  //所属栏目ID
     }
   },
   methods:{
@@ -217,12 +213,22 @@ export default {
         rank: this.rank,
         tag: [this.tag],
         click: this.click,  //点击量
-        columnName: this.columnName,
+        columnName: '',
         content:this.content,
-        channel:this.channel  //所属栏目ID
+        columnId:this.columnId  //所属栏目ID
       }
-      $.post(root.baseurl + 'api/article/addArticle',obj,function(_d){
-        console.log(_d)
+      this.collist.some(function(d){
+        if(d.value == obj.columnId){
+          obj.columnName = d.title
+          return !0
+        }
+      })
+      //console.log(obj)
+      $.post(root.baseurl + 'api/article/addArticle',obj,(_d) =>{//function(_d){
+        if(_d.code == 1){
+          this.$router.push({name:'alldocList'})
+        }
+        //console.log(_d)
       })
 
     },
@@ -234,8 +240,11 @@ export default {
     currViewIndex:function(){
       return this.cvi
     },
-    collist () { // 需要写过滤器
-      return this.$store.getters.getcolumnList
+    collist () { //  转化数据结构
+      return this.$store.getters.getconvercol
+    },
+    selectdata(){
+
     }
   }
 }

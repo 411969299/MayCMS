@@ -142,18 +142,12 @@ router.post('/column/deleteCol', function(req, res, next) {
 // 文章接口开始artObj
 
 
-router.get('/article/getallArt', function(req, res, next) {
-  var colid = (req.query.colid && req.query.colid != '')?req.query.colid:null
-  //console.log(req.body)
-  //if(getColData){
-  //  res.send({code:1,data:getColData,msg:'reok'});
-  //}else{
-  //
-  //}
+router.post('/article/getallArt', function(req, res, next) {
+  console.log(req.body)
+  //var artobj = (req.body && req.body != '')?req.body:null
 
-  artObj.getallArt(colid,function(err,result){
+  artObj.getallArt(req.body,function(err,result){
     if(!err){
-      getColData = result
       res.send({code:1,data:result,msg:'ok'});
     }else{
       res.send({code:0,data:null,msg:err});
@@ -194,35 +188,7 @@ router.post('/article/addArticle', function(req, res, next) {
 
 });
 
-router.post('/article/addChildCol', function(req, res, next) {
-  var field = req.body
-  var date = new Date();
-  var obj = {
-    colid: ShortId.generate(),
-    parentId:field.parentId,
-    colname: field.colname,
-    colname2: field.colname2,
-    coltype: field.coltype,
-    description: field.description,
-    keywords: field.keywords,
-    seotitle: field.seotitle,
-    colprop: field.colprop,
-    rank: field.rank,
-    colrule: field.colrule,
-    content: field.content,
-    creatdate: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-    updated: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-  }
 
-  colObj.addChildCol(obj,function(err,result){
-    if(!err){
-      res.send({code:1,data:result,msg:'ok'});
-    }else{
-      res.send({code:0,data:null,msg:err});
-    }
-  })
-
-});
 
 router.post('/article/updateCol', function(req, res, next) {
   var field = req.body
@@ -242,7 +208,7 @@ router.post('/article/updateCol', function(req, res, next) {
   }
   //console.log({colid: field.colid,})
   //console.log('----------')
-  colObj.updatecol({colid: field.colid},obj,function(err,result){
+  artObj.updatecol({colid: field.colid},obj,function(err,result){
     if(!err){
       res.send({code:1,data:result,msg:'ok'});
     }else{
@@ -258,10 +224,11 @@ router.post('/article/updateCol', function(req, res, next) {
   //}
 });
 router.post('/article/deleteCol', function(req, res, next) {
-  var field = req.body.colid
+  var field = req.body.artid
   //var field = req.query.colid
+  //console.log(field)
   if(field && field!=''){
-    colObj.deletecol(field,function(err,result){
+    artObj.deletecol({artid:field},function(err,result){
       if(!err){
         res.send({code:1,data:result,msg:'ok'});
       }else{

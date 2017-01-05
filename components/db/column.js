@@ -1,10 +1,9 @@
 
-var mongoose = require('mongoose');
 var async = require('async');
 //var ShortId = require('mongoose-shortid');
 var db = require('./index');
 
-var colSchema = mongoose.Schema({
+var colSchema = db.Schema({
     colid: {type:String,default:'0'},
     parentId: {type:String,default:'0'},
     childCol:Array,
@@ -22,7 +21,7 @@ var colSchema = mongoose.Schema({
     updated: { type: Date, default: Date.now }
 })
 
-var columnModel  =mongoose.model('column', colSchema)
+var columnModel  =db.model('column', colSchema)
 
 
 function addTopCol(_o,cb){

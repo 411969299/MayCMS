@@ -42,7 +42,6 @@ export default {
   name: 'columnList',
   data () {
     return {
-      collist:[],
       showStore:''
     }
   },
@@ -79,33 +78,13 @@ export default {
       this.$router.push({name:'columnAdd',query:{parentId:_id,type:'addChildCol'}})
 
     },
-    deleteColFun:function(_id,_pid){
-      //alert('确定删除')
-      var obj = {
-        colid:_id
+    deleteColFun:function(_id,_pid){  //当前id，父id
+
+      var obj = {colid:_id}
+      if(_pid){
+        obj.pid = _pid
       }
-      var _this = this
-      $.post(root.baseurl + 'api/column/deleteCol',obj,function(_d){
-        _this.collist.some(function(d,i){  //随后要放到vuex中 用action替代
-          if(_pid){  //父ID
-            if(d.colid == _pid){   //找到对应的父id
-              return d.childCol.some(function(cd,ci){
-                if(cd.colid == _id){  //找到对应的子id
-                  _this.collist[i].childCol.splice(ci,1)
-                  return !0
-                }
-              })
-            }
-
-          }else{
-            if(d.colid == _id){
-              _this.collist.splice(i,1)
-              return !0
-            }
-          }
-        })
-
-      })
+      this.$store.dispatch('deleteCol',obj)
 
     },
     previewFun:function(){
@@ -119,14 +98,7 @@ export default {
     }
   },
   created:function(){ /// 需要判断数据是否为空
-//    this.$http.get(root.baseurl+'api/getCol').then((res) => {
-//      this.collist = res.data.data
-//      //console.log(res.data.data)
-//  }, (res) => {
-//      console.log(res.data.msg)
-//    })
-console.log(this.$store)
-    this.$store.dispatch('getData')
+    this.$store.dispatch('collistData')
   }
 }
 </script>
