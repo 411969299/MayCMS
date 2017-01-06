@@ -178,6 +178,7 @@ export default {
   data () {
     return {
       cvi:0,
+      artid:'',
       title:'',
       shorttitle: '',
       writer: '',
@@ -211,7 +212,7 @@ export default {
         source: this.source,  //来源
         flag: this.flag,  //自定义属性
         rank: this.rank,
-        tag: [this.tag],
+        tag: this.tag,
         click: this.click,  //点击量
         columnName: '',
         content:this.content,
@@ -223,13 +224,25 @@ export default {
           return !0
         }
       })
-      //console.log(obj)
-      $.post(root.baseurl + 'api/article/addArticle',obj,(_d) =>{//function(_d){
-        if(_d.code == 1){
+      console.log()
+
+      var type  = this.$route.query.type;
+      if(type == 'updateArt'){
+        obj.artid = this.artid
+        $.post(root.baseurl + 'api/article/updateArt',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
+          if(_d.code == 1){
+          this.$router.push({name:'alldocList'})
+        }
+      })
+      }else{
+        $.post(root.baseurl + 'api/article/addArticle',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
+          if(_d.code == 1){
           this.$router.push({name:'alldocList'})
         }
         //console.log(_d)
       })
+      }
+
 
     },
     goBack:function(){
@@ -245,6 +258,31 @@ export default {
     },
     selectdata(){
 
+    }
+  },
+  created:function (){
+    var artdata = this.$router.artData
+    if(artdata){
+      this.artid = artdata.artid,
+      this.title = artdata.title,
+        this.shorttitle = artdata.shorttitle,
+        this.writer = artdata.writer,
+        this.description = artdata.description,
+        this.keywords = artdata.keywords,
+        this.seotitle = artdata.seotitle,
+        this.source = artdata.source,  //来源
+
+        this.flag = artdata.flag,  //自定义属性// ['h','c','f','a','s','b','p','j']
+        this.rank = artdata.rank,
+        this.tag = artdata.tag,
+        this.click = artdata.click,  //点击量
+        this.columnName = artdata.columnName,
+        this.content = artdata.content,
+        this.goodpost = artdata.goodpost,  //点赞数
+        this.badpost = artdata.badpost,  //非点赞数
+        this.columnId = artdata.columnId  //所属栏目ID
+
+      this.$router.artData = null
     }
   }
 }

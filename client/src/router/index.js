@@ -21,7 +21,11 @@ const routes = [
       path:'alldocList',name: 'alldocList',component:articleAllList  //所有档案列表
     },
     {
-      path:'mydocList',name: 'mydocList',component:articleAdd //我发布的文档
+      path:'mydocList',name: 'mydocList',component:articleAllList, //我发布的文档
+      beforeEnter:function(to, from, next){
+        console.log(this)
+        next()
+      }
     },
     {
       path:'groupList',name: 'groupList',component:managerGroupList  //系统用户组

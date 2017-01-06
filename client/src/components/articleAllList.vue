@@ -112,19 +112,35 @@ export default {
       this.$store.dispatch('deleteArt',{artid:_artid})
     },
     ['updataArtFun'](_artid){
-      this.$router.push({ name: 'articleAdd', params: { userId: 123 }})
+      var obj
+      this.artlist.some(function(d){
+        if(_artid == d.artid){
+          obj = d;
+          return !0
+        }
+      })
+      this.$router.artData = obj
+      this.$router.push({ name: 'articleAdd',query:{type:'updateArt'}})
     }
 
   },
   computed:{
     artlist () {
-      return this.$store.getters.getartList
+      //console.log(this.$route)  //刚开始时会执行两次，能解决么？
+      if(this.$route.name == 'alldocList'){
+        return this.$store.getters.getartList
+      }else if(this.$route.name == 'mydocList'){
+        return this.$store.getters.getartList
+      }
+
     },
     collist(){
       return this.$store.getters.getconvercol
     }
   },
   created:function(){
+    //console.log(this.$router)
+
     this.$store.dispatch('artlistData',{})  //"artid":"BJ_MJNore"
   }
 }

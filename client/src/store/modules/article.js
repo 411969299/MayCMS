@@ -6,7 +6,8 @@ import * as types from '../mutation-types'
 
 
 const state = {
-  artListData:[]
+  artListData:[],
+  myartlist:[]
 }
 
 // getters
@@ -25,7 +26,7 @@ const actions = {
   },
   deleteArt({ commit },obj){
     //console.log(obj)
-    $.post(root.baseurl + 'api/article/deleteCol',obj,function(_d){
+    $.post(root.baseurl + 'api/article/deleteArt',obj,function(_d){
       if(_d.code == 1){
         commit(types.DELETE_ARTICLE_DATA,obj)
       }

@@ -26,7 +26,15 @@ var router = new VueRouter({
   routes:routes
 })
 
+router.beforeEach((to,from,next) => {
 
+  //if(to.name == 'mydocList'){
+  //  router.app.$store.dispatch('')
+  //}else{
+  //  next();
+  //}
+  next();
+});
 /* eslint-disable no-new */
 
 

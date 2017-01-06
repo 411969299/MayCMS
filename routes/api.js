@@ -143,7 +143,7 @@ router.post('/column/deleteCol', function(req, res, next) {
 
 
 router.post('/article/getallArt', function(req, res, next) {
-  console.log(req.body)
+  //console.log(req.body)
   //var artobj = (req.body && req.body != '')?req.body:null
 
   artObj.getallArt(req.body,function(err,result){
@@ -156,7 +156,8 @@ router.post('/article/getallArt', function(req, res, next) {
 });
 
 router.post('/article/addArticle', function(req, res, next) {
-  var field = req.body
+  var field = req.body.jsonobj
+  field = JSON.parse(field)
   var date = new Date();
   var obj = {
     artid: ShortId.generate(),
@@ -190,25 +191,29 @@ router.post('/article/addArticle', function(req, res, next) {
 
 
 
-router.post('/article/updateCol', function(req, res, next) {
-  var field = req.body
+router.post('/article/updateArt', function(req, res, next) {
+  var field = req.body.jsonobj
+  field = JSON.parse(field)
   var date = new Date();
   var obj = {
-    colname: field.colname,
-    colname2: field.colname2,
-    coltype: field.coltype,
+    title:field.title,
+    shorttitle: field.shorttitle,
+    writer: field.writer,
     description: field.description,
     keywords: field.keywords,
     seotitle: field.seotitle,
-    colprop: field.colprop,
+    source: field.source,  //来源
+    flag: field.flag,  //自定义属性
     rank: field.rank,
-    colrule: field.colrule,
-    content: field.content,
+    tag: field.tag,
+    click: field.click,  //点击量
+    columnName: field.columnName,
+    content:field.content,
+    columnId:field.columnId,  //所属栏目ID
     updated: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
   }
-  //console.log({colid: field.colid,})
-  //console.log('----------')
-  artObj.updatecol({colid: field.colid},obj,function(err,result){
+
+  artObj.updateArt({artid: field.artid},obj,function(err,result){
     if(!err){
       res.send({code:1,data:result,msg:'ok'});
     }else{
@@ -223,12 +228,12 @@ router.post('/article/updateCol', function(req, res, next) {
   //  //res.send({code:0,data:null,msg:'参数错误'});
   //}
 });
-router.post('/article/deleteCol', function(req, res, next) {
+router.post('/article/deleteArt', function(req, res, next) {
   var field = req.body.artid
   //var field = req.query.colid
   //console.log(field)
   if(field && field!=''){
-    artObj.deletecol({artid:field},function(err,result){
+    artObj.deleteArt({artid:field},function(err,result){
       if(!err){
         res.send({code:1,data:result,msg:'ok'});
       }else{

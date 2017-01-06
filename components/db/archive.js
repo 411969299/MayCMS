@@ -15,7 +15,7 @@ var artSchema = db.Schema({
     seotitle: String,
     source: String,  //来源
     flag: Array,  //自定义属性集合
-    tag:Array, //tag标签
+    tag:String, //tag标签
     rank: String,
     click: String,  //点击量
     goodpost: Number,  //点赞数
@@ -41,7 +41,7 @@ function addArticle(_o,cb){
     })
 }
 
-function deletecol(_o,cb){
+function deleteArt(_o,cb){
     artModel.remove(_o,function(err, result){
         if (err) {
             return cb(err);
@@ -51,8 +51,14 @@ function deletecol(_o,cb){
     })
 }
 
-function updatecol(_old,_new,cb){
-
+function updateArt(_old,_new,cb){
+    artModel.findOneAndUpdate(_old,_new, function (err, o) {
+        if (err){
+            return cb(err);
+        }else{
+            return cb(null,o);
+        }
+    })
 }
 
 function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
@@ -73,5 +79,5 @@ function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查
     })
 }
 module.exports = {
-    addArticle,getallArt,deletecol,updatecol
+    addArticle,getallArt,deleteArt,updateArt
 }
