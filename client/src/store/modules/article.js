@@ -12,7 +12,8 @@ const state = {
 
 // getters
 const getters = {
-  getartList: state => state.artListData
+  getartList: state => state.artListData,
+  getmyArtList: state => state.myartlist
 }
 
 // actions
@@ -24,6 +25,13 @@ const actions = {
       }
     })
   },
+  //artlistData ({ commit },obj){
+  //  $.post(root.baseurl + 'api/article/getallArt',obj,function(_d){
+  //    if(_d.code == 1){
+  //      commit(types.ARTICLE_LIST_DATA,_d.data)
+  //    }
+  //  })
+  //},
   deleteArt({ commit },obj){
     //console.log(obj)
     $.post(root.baseurl + 'api/article/deleteArt',obj,function(_d){
