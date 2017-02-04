@@ -102,7 +102,7 @@ function getcol(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
                     }else{
                         for(var i =0;i<o.length;i++){
                             o[i].childCol = results[i]?results[i]:[]
-                            console.log(i)
+                            //console.log(i)
                         }
                         //console.log(results)
                         return cb(null,o);

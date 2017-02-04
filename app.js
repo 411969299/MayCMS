@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session')
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -21,13 +22,22 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+app.use(cookieParser('sessiontest'));
+app.use(session({
+  secret: 'sessiontest',//与cookieParser中的一致
+  resave: true,
+  saveUninitialized:true
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+
 app.use('/admin', admin);
 app.use('/users', users);
 app.use('/api', api);
+
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

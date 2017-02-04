@@ -1,13 +1,31 @@
 var express = require('express');
 var router = express.Router();
+var ShortId = require('shortid');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {  //默认会打开public目录下的index.html
-  //res.set({
-  //  'Expires':'Sun, 25 Dec 2017 11:25:27 GMT',
-  //  'Last-Modified':'Sun, 25 Dec 2017 11:25:27 GMT'
-  //})
+
+//router.use('//',function(req, res, next) {  //后续Redis持久化
+//  console.log('is session')
+//  var sess = req.session
+//  if (sess.views) {
+//    next()
+//  } else {
+//    //res.render('login', { title: '登录' })
+//    res.render('register', { title: '注册' })
+//  }
+//})
+
+router.get('/', function(req, res, next) {
   res.render('index', { title: '2222222222222222' });
 });
+router.get('/details/:id', function (req, res, next) {
 
+  var id = req.params.id;
+  if(ShortId.isValid(id)){
+
+  }else{
+
+  }
+
+});
 module.exports = router;

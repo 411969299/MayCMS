@@ -75,7 +75,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [],
   vue: {
     loaders: utils.cssLoaders({sourceMap: useCssSourceMap}),
     postcss: [
