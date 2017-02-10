@@ -4,21 +4,25 @@ var async = require('async');
 var db = require('./index');
 
 /*
-角色表
+权限表
  */
+var rolesSchema = db.Schema({
+    // 角色名称
+    roleid: String,
+    name: String,
+    rank:Number,
+    // 权限备注
+    description: String,
+    // 权限值
+    roleNumber: String
+});
 
-var roleSchema = db.Schema({
-    rolename:String,
-    parent_rid:{ type: String, default:'0' }, //父级id
-    description:String,
-    creatdate: { type: Date, default: Date.now }
-})
 
-var roleModel  =db.model('role', roleSchema)
+var roleModel  =db.model('Roles', rolesSchema)
 
 
 
-function addArticle(_o,cb){
+function addRoles(_o,cb){
     roleModel.create(_o, function (err, o) {
         if (err){
             return cb(err);
@@ -28,7 +32,7 @@ function addArticle(_o,cb){
     })
 }
 
-function deleteArt(_o,cb){
+function deleteRoles(_o,cb){
     roleModel.remove(_o,function(err, result){
         if (err) {
             return cb(err);
@@ -38,7 +42,7 @@ function deleteArt(_o,cb){
     })
 }
 
-function updateArt(_old,_new,cb){
+function updateRoles(_old,_new,cb){
     roleModel.findOneAndUpdate(_old,_new, function (err, o) {
         if (err){
             return cb(err);
@@ -48,7 +52,7 @@ function updateArt(_old,_new,cb){
     })
 }
 
-function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
+function getallRoles(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
     var query = {}
     if(_o){
         query = _o
@@ -66,5 +70,5 @@ function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查
     })
 }
 module.exports = {
-    addArticle,getallArt,deleteArt,updateArt
+    addRoles,deleteRoles,updateRoles,getallRoles
 }

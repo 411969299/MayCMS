@@ -4,23 +4,23 @@ var async = require('async');
 var db = require('./index');
 
 /*
-用户表
+用户组表
  */
-var userSchema = db.Schema({
-    uname:String,
-    sex: String,
-    qq: String,
-    score: {type:Number,default:0}, //用户积分
-    status: String,  //用户状态
-    pwd: String,  //密码
-    email: String,
-    phone: String,  //
-    utype: Array,  //  用户类型
-    last_login_time:Date, // 最近一次登录时间
-    reg_time: { type: Date, default: Date.now }  //注册时间
-})
+var adminGroupSchema = db.Schema({
+    // 角色名称
+    name: {
+        type: String,
+        required: true
+    },
+    groupid:String,
+    rank:Number,
+    // 角色备注
+    description: String,
+    // 权限列表
+    authorities: [String]
+});
 
-var userModel  =db.model('user', userSchema)
+var userModel  =db.model('adminGroup', adminGroupSchema)
 
 
 

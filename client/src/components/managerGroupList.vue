@@ -2,7 +2,7 @@
   <!-- 系统用户组-->
           <div class="row">
             <div class="managerGroupList">
-              <div class="pbhead "><div class="tit pull-left">系统用户组管理</div><div class="corl pull-right"><div class="btn btn-default">增加一个用户组</div><div class="btn btn-default">管理系统用户</div></div></div>
+              <div class="pbhead "><div class="tit pull-left">系统用户组管理</div><div class="corl pull-right"><div @click="changeUrl('managerGroupAdd')" class="btn btn-default">增加一个用户组</div><div class="btn btn-default">管理系统用户</div></div></div>
               <div class="pbhead_dec clearfix">
               </div>
               <table class="table table-striped table-hover">
@@ -33,7 +33,7 @@
               </table>
             </div>
           </div>
-          
+
 </template>
 
 <script>
@@ -43,6 +43,11 @@ export default {
   data () {
     return {
 
+    }
+  },
+  methods:{
+    ['changeUrl']: function (_name) {
+      this.$router.push({name: _name})
     }
   }
 }

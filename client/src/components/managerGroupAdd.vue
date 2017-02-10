@@ -54,7 +54,7 @@
               </div>
             </div>
           </div>
-         
+
 </template>
 
 <script>
@@ -67,4 +67,7 @@ export default {
     }
   }
 }
+  /*
+  * 先建立一个权限表，一个用户组表，一个角色表 RBAC
+  * */
 </script>

@@ -9,28 +9,28 @@
                 <div class="row">
                   <div class="col-md-1">用户登录ID</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" id="loginID">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-1">用户笔名</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" id="penName">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-1">用户密码</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="password" id="pwd">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-1">用户组</div>
                   <div class="col-md-2">
-                    <select name="" id="">
+                    <select name="" id="groupid">
                       <option value="1">1111111111</option>
                     </select>
                   </div>
@@ -51,14 +51,14 @@
                 <div class="row">
                   <div class="col-md-1">真实姓名</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" id="trueName">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-1">电子邮箱</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" id="email">
                   </div>
                 </div>
                 <div class="row">
@@ -70,20 +70,40 @@
                 </div>
               </div>
               <div class="addform">
-                <div class="btn btn-default">增加用户</div>
+                <div @click="addUserFun()" class="btn btn-default">增加用户</div>
               </div>
             </div>
           </div>
-          
+
 </template>
 
 <script>
-
+  import root from '../setting';
+  var $ = require('jquery')
 export default {
   name: 'managerAdd',
   data () {
     return {
 
+    }
+  },
+  methods: {
+    ['addUserFun']: function () {
+      var obj = {
+        loginID:$('#loginID').val(),
+        penName:$('#penName').val(),
+        pwd:$('#pwd').val(),
+        groupid:$('#groupid').val(),
+        trueName:$('#trueName').val(),
+        email:$('#email').val()
+      }
+      $.post(root.baseurl+'api/adminUser/addUser',obj,(res) =>{
+        if(res.code == 1){
+        this.$router.push({name: 'managersList'})
+      }else{
+        console.log(res.msg)
+      }
+    })
     }
   }
 }

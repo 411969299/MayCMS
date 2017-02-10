@@ -4,18 +4,22 @@ var async = require('async');
 var db = require('./index');
 
 /*
-用户表
+后台用户表
  */
 var userSchema = db.Schema({
-    uname:String,
-    sex: String,
-    qq: String,
+    userid:String,
+    loginID:String,
+    penName:String,
+    trueName:String,
     score: {type:Number,default:0}, //用户积分
+    groupid:String,
     status: String,  //用户状态
     pwd: String,  //密码
     email: String,
-    phone: String,  //
-    utype: Array,  //  用户类型
+    role: {
+        type: db.Schema.Types.ObjectId,
+        ref: 'Roles'
+    },
     last_login_time:Date, // 最近一次登录时间
     reg_time: { type: Date, default: Date.now }  //注册时间
 })
@@ -24,7 +28,7 @@ var userModel  =db.model('user', userSchema)
 
 
 
-function addArticle(_o,cb){
+function addUser(_o,cb){
     userModel.create(_o, function (err, o) {
         if (err){
             return cb(err);
@@ -34,7 +38,7 @@ function addArticle(_o,cb){
     })
 }
 
-function deleteArt(_o,cb){
+function deleteUser(_o,cb){
     userModel.remove(_o,function(err, result){
         if (err) {
             return cb(err);
@@ -44,7 +48,7 @@ function deleteArt(_o,cb){
     })
 }
 
-function updateArt(_old,_new,cb){
+function updateUser(_old,_new,cb){
     userModel.findOneAndUpdate(_old,_new, function (err, o) {
         if (err){
             return cb(err);
@@ -54,12 +58,8 @@ function updateArt(_old,_new,cb){
     })
 }
 
-function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
-    var query = {}
-    if(_o){
-        query = _o
-    }
-    userModel.find(query,function (err, o) {
+function getallUser(_o,cb){  // 取出所有数据 组合，，或者是挨个查询
+    userModel.find(_o,function (err, o) {
         if (err){
             return cb(err);
         }else{
@@ -72,5 +72,5 @@ function getallArt(_o,cb){  // 取出所有数据 组合，，或者是挨个查
     })
 }
 module.exports = {
-    addArticle,getallArt,deleteArt,updateArt
+    addUser,deleteUser,updateUser,getallUser
 }

@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session')
+var RedisStore = require('connect-redis')(session);
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -27,7 +28,13 @@ app.use(cookieParser('sessiontest'));
 app.use(session({
   secret: 'sessiontest',//与cookieParser中的一致
   resave: true,
-  saveUninitialized:true
+  saveUninitialized:true,
+  name:'ssid',
+  store: new RedisStore({
+    "host": "127.0.0.1",
+    "port": "6379",
+    "ttl": 30   // 30秒
+  })
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
