@@ -8,8 +8,8 @@ import managerAdd from '../components/managerAdd'
 import managerGroupAdd from '../components/managerGroupAdd'
 import managerGroupList from '../components/managerGroupList'
 import managersList from '../components/managersList'
-//import admin from '../components/admin'
-//import admin from '../components/admin'
+import login from '../components/login'
+
 
 var root = '/admin/manage/'
 const routes = [
@@ -48,7 +48,10 @@ const routes = [
     {
       path:'managerGroupAdd',name: 'managerGroupAdd',component:managerGroupAdd
     }
-  ]}
+  ]},
+  {
+    path:'/admin/login',name:'login',component:login  //登录
+  }
 ]
 
 export default routes

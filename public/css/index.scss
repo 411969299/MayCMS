@@ -44,3 +44,29 @@ ul,li{ list-style: none;}
 .nav-tabs{
   li,a{ cursor: pointer;}
 }
+
+
+#Login{
+  width: 100%;
+  height: 100%;
+  background: #2d353c; position: absolute;
+  .login{
+    width: 500px; margin: 0 auto; height: 350px; margin-top: 200px; background-color: #fff; border-radius: 10px;
+    overflow: hidden;
+    .maycms{
+      text-align: center;
+    }
+  }
+
+  .powered{
+    text-align: center; color: #fff; margin-top: 20px;
+  }
+}
+
+
+
+
+
+
+
+

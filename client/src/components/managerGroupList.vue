@@ -17,17 +17,17 @@
                 <tr>
                   <td>1</td>
                   <td>信息发布员</td>
-                  <td><a href="">权限设定</a><a href="">组用户</a></td>
+                  <td><a href="">修改</a><a href="">删除</a></td>
                 </tr>
                 <tr>
                   <td>5</td>
                   <td>频道管理员</td>
-                  <td><a href="">权限设定</a><a href="">组用户</a></td>
+                  <td><a href="">修改</a><a href="">删除</a></td>
                 </tr>
                 <tr>
                   <td>10</td>
-                  <td>超级管理员</td>
-                  <td><a href="">权限设定</a><a href="">组用户</a></td>
+                  <td>系统管理员</td>
+                  <td><a href="">修改</a><a href="">删除</a></td>
                 </tr>
                 </tbody>
               </table>

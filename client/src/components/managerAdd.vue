@@ -7,23 +7,23 @@
               </div>
               <div class="addform ">
                 <div class="row">
-                  <div class="col-md-1">用户登录ID</div>
+                  <div class="col-md-1">Email</div>
                   <div class="col-md-2">
-                    <input type="text" id="loginID">
+                    <input type="text" id="email">
                   </div>
                 </div>
 
                 <div class="row">
-                  <div class="col-md-1">用户笔名</div>
+                  <div class="col-md-1">昵称</div>
                   <div class="col-md-2">
-                    <input type="text" id="penName">
+                    <input type="text" id="nickName">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-1">用户密码</div>
                   <div class="col-md-2">
-                    <input type="password" id="pwd">
+                    <input type="password" id="password">
                   </div>
                 </div>
 
@@ -56,12 +56,6 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-md-1">电子邮箱</div>
-                  <div class="col-md-2">
-                    <input type="text" id="email">
-                  </div>
-                </div>
-                <div class="row">
                   <div class="col-md-1">安全验证串</div>
                   <div class="col-md-2">
                     <input type="text">
@@ -90,14 +84,13 @@ export default {
   methods: {
     ['addUserFun']: function () {
       var obj = {
-        loginID:$('#loginID').val(),
-        penName:$('#penName').val(),
-        pwd:$('#pwd').val(),
+        email:$('#email').val(),
+        nickName:$('#nickName').val(),
+        password:$('#password').val(),
         groupid:$('#groupid').val(),
-        trueName:$('#trueName').val(),
-        email:$('#email').val()
+        trueName:$('#trueName').val()
       }
-      $.post(root.baseurl+'api/adminUser/addUser',obj,(res) =>{
+      $.post(root.baseurl+'api/admin-users',obj,(res) =>{
         if(res.code == 1){
         this.$router.push({name: 'managersList'})
       }else{

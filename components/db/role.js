@@ -10,8 +10,6 @@ var rolesSchema = db.Schema({
     // 角色名称
     roleid: String,
     name: String,
-    rank:Number,
-    // 权限备注
     description: String,
     // 权限值
     roleNumber: String
