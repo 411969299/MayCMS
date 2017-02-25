@@ -31,7 +31,7 @@
                   <div class="col-md-1">用户组</div>
                   <div class="col-md-2">
                     <select name="" id="groupid">
-                      <option value="1">1111111111</option>
+                      <option value="1">3333333</option>
                     </select>
                   </div>
                   <div class="col-md-1"><a href="">用户组设定</a></div>
