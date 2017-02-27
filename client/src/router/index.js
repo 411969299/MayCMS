@@ -46,7 +46,7 @@ const routes = [
       path:'managerAdd',name: 'managerAdd',component:managerAdd
     },
     {
-      path:'managerGroupAdd',name: 'managerGroupAdd',component:managerGroupAdd
+      path:'groupAdd',name: 'groupAdd',component:managerGroupAdd
     }
   ]},
   {

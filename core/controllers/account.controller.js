@@ -10,6 +10,8 @@ var usersService = require('../services/users.service');
  * @param {Function} next
  */
 exports.check = function (req, res, next) {
+	next();
+	return
 	if (req.session.user) {
 		next();
 	} else {

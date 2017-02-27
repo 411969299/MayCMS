@@ -12,7 +12,7 @@ var rolesSchema = new mongoose.Schema({
 
   // 角色备注
   description: String,
-
+  rank:Number,
   // 权限列表
   authorities: [Number]
 }, {

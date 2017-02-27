@@ -25,7 +25,8 @@
     "morgan": "~1.7.0",
     "require-all": "^2.2.0",
     "serve-favicon": "~2.3.0",
-    "shortid": "^2.2.6"
+    "shortid": "^2.2.6",
+    "validator": "^7.0.0"
   },
   "devDependencies": {
     "connect-redis": "^3.2.0",

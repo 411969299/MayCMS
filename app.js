@@ -6,6 +6,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var validator = require('./lib/validator.lib');
 var router = require('./lib/route-map.lib');
 
 var app = express();
@@ -19,7 +20,7 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(validator());
 app.use(cookieParser('sessiontest'));
 app.use(session({
   secret: 'sessiontest',//与cookieParser中的一致

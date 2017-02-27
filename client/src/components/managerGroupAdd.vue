@@ -9,19 +9,19 @@
                 <div class="row">
                   <div class="col-md-1">组名称：</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" v-model="name" placeholder="组名称" id="roleName">
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-1">备注：</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" v-model="description" placeholder="备注" id="description">
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-1">级别值：</div>
                   <div class="col-md-2">
-                    <input type="text">
+                    <input type="text" id="roleRank">
                   </div>
                 </div>
                 <div class="row">
@@ -33,64 +33,18 @@
                     </tr>
                     </thead>
                     <tbody class="rolesarr">
-                    <tr>
-                      <td>文章管理</td>
+
+                    <tr v-for="item in authorities">
+                      <td>{{item.description}}</td>
                       <td>
-                        <label @click="arc=0" :class="{'active': arc === 0 }" class="btn btn-default">无权限</label><label @click="arc=1" :class="{'active': arc === 1 }" class="btn btn-default">仅查看</label><label @click="arc=2" :class="{'active': arc === 2 }" class="btn btn-default">查看和编辑</label>
+                        <label @click="item.select=0" :class="{'active': item.select === 0 }" class="btn btn-default">无权限</label><label @click="item.select=1" :class="{'active': item.select === 1 }" class="btn btn-default">仅查看</label><label @click="item.select=2" :class="{'active': item.select === 2 }" class="btn btn-default">查看和编辑</label>
                       </td>
                     </tr>
-                    <tr>
-                      <td>频道管理</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>推荐管理</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>单页管理</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>媒体库</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>个人账号设置</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>网站配置</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>权限管理</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>后台用户管理</td>
-                      <td>
-                        <label class="btn btn-default">无权限</label><label class="btn btn-default active">仅查看</label><label class="btn btn-default">查看和编辑</label>
-                      </td>
-                    </tr>
+
                     </tbody>
                   </table>
                   <div class="addmang_btn">
-                    <div class="btn btn-default">保存</div>
+                    <div @click="saveRole" class="btn btn-default">保存</div>
                   </div>
                 </div>
               </div>
@@ -100,13 +54,142 @@
 </template>
 
 <script>
+  import root from '../setting';
+  var _ = require('lodash')
+  import parallel from 'async/parallel'
+
+  import { MessageBox } from 'element-ui';
+  import Vue from 'vue'
+  Vue.component(MessageBox.name, MessageBox)
 
 export default {
   name: 'managerGroupAdd',
   data () {
     return {
-      arc:1
+      name:'',
+      description:'',
+      authorities:[]
     }
+  },
+  methods:{
+    saveRole:function(){
+      var me = this
+      var role = {
+        name: me.name,
+        description: me.description,
+        rank:0,
+        authorities: []
+      }
+      _.forEach(me.authorities, function (authority) {
+
+        switch (authority.select) {
+          case 0: break;
+          case 1:
+            _.forEach(authority.authorities, function (authority) {
+              if (authority.name === 'read') role.authorities.push(authority.code);
+            });
+            break;
+          case 2:
+            _.forEach(authority.authorities, function (authority) {
+              if (authority.name === 'read') role.authorities.push(authority.code);
+              if (authority.name === 'edit') role.authorities.push(authority.code);
+            });
+        }
+      });
+
+      if (me.$route.params.groupId) { // 修改
+        role._id = me.$route.params.groupId;
+
+        me.$http.put(root.baseurl+'api/roles/' + me.$route.params.groupId, role)
+          .then(function () {
+            MessageBox.alert('保存角色成功', '提示信息', {
+              confirmButtonText: '确定',
+              type:'success'
+            });
+            console.log('保存角色成功')
+          }, function () {
+            MessageBox.alert('保存角色失败', '错误信息', {
+              confirmButtonText: '确定',
+              type:'error'
+            });
+            console.log('保存角色失败')
+          });
+      } else {
+        me.$http.post(root.baseurl+'api/roles', role)
+          .then(function () {
+            console.log('新增角色成功')
+          }, function () {
+            console.log('新增角色失败')
+          });
+      }
+    }
+  },
+  created:function(){
+    var me = this
+    parallel({
+      authorities: function (callback) {
+        me.$http.get(root.baseurl+'api/authorities').then(response => {
+
+          var data = _.reject(response.body, { code: 100000 });
+        callback(null, data);
+
+      }, response => {
+          callback('获取权限失败');
+        });
+      },
+      role: function (callback) {
+        var _id = me.$route.params.groupId
+        if (_id) {
+          //$scope.action = 'update';
+          me.$http.get(root.baseurl+'api/roles/' + _id)
+            .then(function (res) {
+              var data = res.body;
+              callback(null, data);
+            }, function () {
+              callback('获取角色失败');
+            });
+        } else {
+          callback(null);
+        }
+      }
+    },function(err,results){
+      if (err) {
+        console.log(err)
+        return false;
+      }
+
+      me.authorities = _.map(results.authorities, function (authority) {
+        authority.select = 0;
+        return authority;
+      });
+
+      if (results.role) {
+        me.name = results.role.name;
+        me.description = results.role.description;
+
+        _.forEach(me.authorities, function (authority) {
+          authority.select = 0;
+
+          var read = _.find(authority.authorities, { name: 'read' }).code;
+          var edit = _.find(authority.authorities, { name: 'edit' }).code;
+
+          var userRead = _.find(results.role.authorities, function (readCode) {
+            return readCode === read;
+          });
+
+          var userEdit = _.find(results.role.authorities, function (editCode) {
+            return editCode === edit;
+          });
+
+          if (userRead && userEdit) {
+            authority.select = 2;
+          } else if (userRead) {
+            authority.select = 1;
+          }
+        });
+      }
+    })
+
   }
 }
   /*

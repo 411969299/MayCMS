@@ -105,7 +105,7 @@ module.exports = {
         put: [110201, 100301, 'categories.update'],
         delete: [110201, 'categories.remove']
       }
-    }
+    },
 
     // 内容
     //'/article': {
@@ -159,22 +159,22 @@ module.exports = {
     //  }
     //},
 
-    // 权限列表
-    //'/authorities': {
-    //  get: 'authorities'
-    //},
-    //
-    //// 权限管理
-    //'/roles': {
-    //  get: [110500, 110600, 'roles.list'],
-    //  post: [110501, 'roles.create'],
-    //
-    //  '/:_id': {
-    //    get: [110500, 'roles.one'],
-    //    put: [110501, 'roles.update'],
-    //    delete: [110501, 'roles.remove']
-    //  }
-    //},
+     //权限列表
+    '/authorities': {
+      get: 'authorities'
+    },
+
+    // 权限管理
+    '/roles': {
+      get: [110500, 110600, 'roles.list'],
+      post: [110501, 'roles.create'],
+
+      '/:_id': {
+        get: [110500, 'roles.one'],
+        put: [110501, 'roles.update'],
+        delete: [110501, 'roles.remove']
+      }
+    }
     //
 
     // 模板

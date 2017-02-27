@@ -8,8 +8,8 @@
               <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                  <th>登录ID</th>
-                  <th>笔名</th>
+                  <th>邮箱</th>
+                  <th>昵称</th>
                   <th>级别</th>
                   <th>频道</th>
                   <th>登录时间</th>
@@ -19,11 +19,11 @@
                 </thead>
                 <tbody>
                 <tr v-for="key in adminuserList">
-                  <td>{{key.loginID}}</td>
-                  <td>{{key.penName}}</td>
+                  <td>{{key.email}}</td>
+                  <td>{{key.nickname}}</td>
                   <td>超级管理员</td>
                   <td>所有频道</td>
-                  <td>{{key.last_login_time}}</td>
+                  <td>{{key.lastlogintime}}</td>
                   <td>22222</td>
                   <td><a  @click="updataUserFun(key.userid)">更改</a>|<a @click="deleteUserFun(key.userid)">删除</a>|<a @click="userArtFun(key.userid)">文档</a></td>
                 </tr>
@@ -59,13 +59,17 @@ export default {
     }
   },
   created:function(){
-    $.post(root.baseurl+'api/adminUser/getallUser','',(res) =>{
-      if(res.code == 1){
-      this.adminuserList = res.data
-    }else{
-      console.log(res.msg)
-    }
-  })
+
+    var me = this
+    me.$http.get(root.baseurl+'api/admin-users')
+      .then(function (res) {
+        var data = res.body;
+        this.adminuserList = res.data
+      }, function () {
+        MessageBox.alert('获取用户失败', '错误信息', {
+          confirmButtonText: '确定'
+        });
+      });
   }
 }
 </script>
