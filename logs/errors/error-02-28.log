@@ -1,0 +1,7 @@
+[2017-02-28 20:07:43.054] [ERROR] system - D:\AppServ\www\node_vue_cms\core\controllers\categories.controller.js 参数验证失败 [ { param: 'sort', message: 'sort 需为数字', value: '1' },
+  { param: 'views.layout',
+    message: 'views.layout 不能为空',
+    value: '' },
+  { param: 'views.channel',
+    message: 'views.channel 不能为空',
+    value: '' } ]

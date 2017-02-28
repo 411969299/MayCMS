@@ -12,116 +12,47 @@
               </div>
               <div class="addCol_tap">
                 <ul class="nav nav-tabs" role="tablist">
-                  <li role="presentation" @click="changeView(0)" :class="currViewIndex==0?'active':''" ><a>常规选项</a></li>
-                  <li role="presentation" @click="changeView(1)" :class="currViewIndex==1?'active':''"><a>高级选项</a></li>
-                  <li role="presentation" @click="changeView(2)" :class="currViewIndex==2?'active':''"><a>栏目内容</a></li>
+                  <li role="presentation" @click="type='channel'" :class="type=='channel'?'active':''" ><a>频道</a></li>
+                  <li role="presentation" @click="type='column'" :class="type=='column'?'active':''"><a>栏目</a></li>
+                  <li role="presentation" @click="type='page'" :class="type=='page'?'active':''"><a>单页</a></li>
                 </ul>
               </div>
+
+              <!--<label for="" class="col-sm-8 control-label">最终栏目列表(允许在本栏目发布文档)</label>-->
+              <!--<label for="" class="col-sm-8 control-label">频道封面(栏目本身不允许发布文档)</label>-->
+              <!---->
               <div class="addCol_tap_con">
-                <div class="addCol_tap_0" v-show="currViewIndex==0">
+                <div class="addCol_tap_0" v-show="type=='channel'">
                   <div class="row">
-                    <div class="col-md-1">内容模型</div>
+                    <div class="col-md-1">频道名称</div>
                     <div class="col-md-2">
-                      <select  class="form-control" v-model="coltype">
-                        <option value="0">普通文章 | article</option>
-                        <option value="1">图片</option>
-                        <option value="2">其他</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-1">栏目名称</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control"  v-model="colname">
+                      <input type="text" class="form-control"  v-model="name">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-1">排列顺序</div>
                     <div class="col-md-1">
-                      <input type="text" class="form-control"  v-model="rank">
+                      <input type="text" class="form-control"  v-model="sort">
                     </div>
                     <div class="col-md-1">由低到高</div>
                   </div>
                   <div class="row">
-                    <div class="col-md-1">浏览权限</div>
-                    <div class="col-md-2">
-                      <select  class="form-control"  v-model="colrule">
-                        <option value="0">1</option>
-                        <option value="1">2</option>
-                      </select>
+                    <div class="col-md-1">显示</div>
+                    <div class="col-md-2 checkbox">
+                      <label>
+                        <input type="checkbox" v-model="isShow" value="" >
+                        是否在导航栏中显示
+                      </label>
                     </div>
                   </div>
 
                   <div class="row">
-                    <div class="col-md-1">目录相对位置</div>
+                    <div class="col-md-1">目录</div>
                     <div class="col-md-3">
-                      <label for="">
-                        <input type="radio" name="colpath" value="0"  v-model="colpath">上级目录
-                      </label>
-                      <label for="">
-                        <input type="radio" name="colpath" value="1"  v-model="colpath">cms跟目录
-                      </label>
-                      <label for="">
-                        <input type="radio" name="colpath" value="2"  v-model="colpath">站点根目录
-                      </label>
+                      <input type="text" class="form-control" v-model="path" >
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-1">栏目属性</div>
-                    <div class="col-md-4">
-                      <div class="form-group clearfix">
-                        <div class="col-sm-1">
-                          <input type="radio" name="colprop" value="0"  v-model="colprop">
-                        </div>
-                        <label for="" class="col-sm-8 control-label">最终栏目列表(允许在本栏目发布文档)</label>
-                      </div>
-                      <div class="form-group clearfix">
-                        <div class="col-sm-1">
-                          <input type="radio" name="colprop" value="1"  v-model="colprop">
-                        </div>
-                        <label for="" class="col-sm-8 control-label">频道封面(栏目本身不允许发布文档)</label>
-                      </div>
-                      <div class="form-group clearfix">
-                        <div class="col-sm-1">
-                          <input type="radio" name="colprop" value="2"  v-model="colprop">
-                        </div>
-                        <label for="" class="col-sm-8 control-label">外部链接()</label>
-                      </div>
-                      <!--<label for="">最终栏目列表</label>-->
-                      <!--<input type="password" class="form-control" id="" placeholder="Password">-->
-                      <!--<label for="exampleInputPassword1">Password</label>-->
-                      <!--<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">-->
-                      <!--<label for="exampleInputPassword1">Password</label>-->
-                      <!--<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">-->
-                    </div>
-                  </div>
-                </div>
-                <div class="addCol_tap_1"  v-show="currViewIndex==1">
-                  <div class="row">
-                    <div class="col-md-1">列表模板</div>
-                    <div class="col-md-4">
-                      <input type="text"  class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-1">文章模板</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-1">列表命名规则</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-1">文章命名规则</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control">
-                    </div>
-                  </div>
                   <div class="row">
                     <div class="col-md-1">SEO标题</div>
                     <div class="col-md-2">
@@ -140,17 +71,100 @@
                       <textarea  class="form-control" v-model="description" cols="30" rows="10"></textarea>
                     </div>
                   </div>
-                </div>
-                <div class="addCol_tap_2"  v-show="currViewIndex==2">
-                  <div class="dsc">说明：栏目内容，简介用途</div>
+
                   <div class="row">
-                    <div class="col-md-10">
-                      <textarea class="form-control"  v-model="content" cols="30" rows="10"></textarea>
+                    <div class="col-md-1">列表模板</div>
+                    <div class="col-md-4">
+                      <input type="text"  class="form-control">
                     </div>
                   </div>
                 </div>
+                <div class="addCol_tap_1"  v-show="type=='column'">
+                  <div class="row">
+                    <div class="col-md-1">栏目名称</div>
+                    <div class="col-md-2">
+                      <input type="text" class="form-control"  v-model="name">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">内容模型</div>
+                    <div class="col-md-2">
+                      <select  class="form-control" v-model="model">
+                        <option value="0">普通文章 | article</option>
+                        <option value="1">图片</option>
+                        <option value="2">其他</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-1">上级分类</div>
+                    <div class="col-md-2">
+                      <select   class="form-control " id="parentCategory" name="parentCategory"><option value="" class="">作为顶级分类</option><option value="0" label="我的频道">我的频道</option></select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-1">排列顺序</div>
+                    <div class="col-md-1">
+                      <input type="text" class="form-control"  v-model="sort">
+                    </div>
+                    <div class="col-md-1">由低到高</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">显示</div>
+                    <div class="col-md-2 checkbox">
+                      <label>
+                        <input type="checkbox" value="" v-model="isShow">
+                        是否在导航栏中显示
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-1">目录</div>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" v-model="path">
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-1">SEO标题</div>
+                    <div class="col-md-2">
+                      <input type="text" class="form-control"  v-model="seotitle">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">关键字</div>
+                    <div class="col-md-2">
+                      <input type="text" class="form-control" v-model="keywords">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">栏目描述</div>
+                    <div class="col-md-4">
+                      <textarea  class="form-control" v-model="description" cols="30" rows="10"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-1">列表模板</div>
+                    <div class="col-md-4">
+                      <input type="text"  class="form-control">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-1">文章模板</div>
+                    <div class="col-md-2">
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="addCol_tap_2"  v-show="type=='page'">
+
+                </div>
                 <div class="addCol_con_btn">
-                  <div @click="submitData" class="btn btn-default">确定</div>
+                  <div @click="saveCategory" class="btn btn-default">确定</div>
                   <div @click="goBack" class="btn btn-default">返回</div>
                 </div>
               </div>
@@ -161,74 +175,121 @@
 
 <script>
 
-//import { Message } from 'element-ui';
 import root from '../setting';
 var $ = require('jquery')
-//console.log(window.location.search)
+
+import { MessageBox } from 'element-ui';
+import Vue from 'vue'
+Vue.component(MessageBox.name, MessageBox)
+
 export default {
   name: 'columnAdd',
   data () {
     return {
-      cvi:0,
-      coltype:0,
-      colname:'',
-      rank:'',
-      colrule:0,
-      colpath:0,
-      colprop:0,
+      type:'channel',//'channel', 'column', 'page', 'link'
+      name:'',
+      sort:'',
+      isShow:true,
+      path:'',
       seotitle:'',
       keywords:'',
       description:'',
       content:'',
-      colid:0
+      model:'',
+      views:{
+        layout:'layout',
+        channel:'channel',
+        column:'',
+        content:''
+      },
+      mixed:{
+        pageSize:'',
+        url:''
+      }
     }
   },methods:{
-    changeView:function(_dom){
-      this.cvi = _dom
-    },
-    submitData:function(){
-      //Message.success({message:'操作成功'})
-      var pid = this.$route.query.parentId
-      var type  = this.$route.query.type;
-      var posturl = ''
-      var obj = {
-        coltype:this.coltype,
-        colname:this.colname,
-        rank:this.rank,
-        colrule:this.colrule,
-        colpath:this.colpath,
-        colprop:this.colprop,
-        seotitle:this.seotitle,
-        keywords:this.keywords,
-        description:this.description,
-        content:this.content
+    saveCategory:function(){
+      var me = this
+      var category = {
+        type: me.type,
+        name: me.name,
+        isShow: me.isShow,
+        sort: parseInt(me.sort)
+      };
+
+      category.path = '/' + me.path.toLowerCase();
+
+      switch (me.type) {
+        case 'channel':
+
+          category['views.layout'] = me.views.layout;
+          category['views.channel'] = me.views.channel;
+          category.keywords = me.keywords;
+          category.description = me.description;
+
+          break;
+        case 'column':
+          category.model = me.model;
+
+          category['mixed.pageSize'] = me.pageSize;
+          category['views.layout'] = me.views.layout;
+          category['views.column'] = me.views.column;
+          category['views.content'] = me.views.content;
+          category.keywords = me.keywords;
+          category.description = me.description;
+
+          break;
+        case 'page':
+          category['views.layout'] = me.views.layout;
+          category['views.page'] = me.views.page;
+          category['mixed.isEdit'] = me.isEdit;
+          category.keywords = me.keywords;
+          category.description = me.description;
+
+          break;
+        case 'link':
+          category['mixed.url'] = me.url;
       }
 
-      if(type && type=='addChildCol'){  //添加子类
-        obj.parentId = pid
-        posturl = 'api/column/addChildCol'
-      }else if(type && type=='updateCol'){  //修改当前栏目
-        posturl = 'api/column/updateCol'
-        obj.colid = this.colid
-      }else{  //增加新的顶级栏目
-        posturl = 'api/column/addTopCol'
+      if (false) {
+//        category._id = $stateParams._id;
+//
+//        $http.put('/api/categories/' + $stateParams._id, category)
+//          .then(function () {
+//            me.$emit('notification', {
+//              type: 'success',
+//              message: '保存分类成功'
+//            });
+//
+//            me.$emit('mainCategoriesUpdate');
+//
+//            $state.go('main.categories', null, { reload: 'main.categories' });
+//          }, function () {
+//            me.$emit('notification', {
+//              type: 'danger',
+//              message: '保存分类失败'
+//            });
+//          });
+      } else {
+        this.$http.post(root.baseurl+'api/categories', category)
+          .then(function () {
+            MessageBox.alert('保存分类成功', '提示信息', {
+              confirmButtonText: '确定',
+              type:'success'
+            });
+          }, function () {
+            MessageBox.alert('保存分类失败', '错误信息', {
+              confirmButtonText: '确定',
+              type:'error'
+            });
+          });
       }
-
-      $.post(root.baseurl+posturl,obj,(res) =>{
-        if(res.code == 1){
-        this.$router.push({name:'columnList'})
-      }else{
-        console.log(res.msg)
-      }
-      })
     },
     goBack:function(){
       this.$router.go(-1)
     }
-  },computed:{
-    currViewIndex:function(){
-      return this.cvi
-    }
+  },
+  computed:{
   },
 created:function (){
 
@@ -236,7 +297,7 @@ created:function (){
   if(type && type == 'updateCol'){
     var d = this.$route.query.coldata;
     this.colid = d.colid
-    this.coltype = d.coltype,
+    this.type = d.type,
       this.colname = d.colname,
       this.rank = d.rank,
       this.colrule = d.colrule,

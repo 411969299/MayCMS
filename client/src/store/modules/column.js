@@ -4,6 +4,7 @@ import root from '../../setting';
 
 import * as types from '../mutation-types'
 
+import Vue from 'vue'
 
 const state = {
   columnListData:[]
@@ -29,12 +30,13 @@ const getters = {
 // actions
 const actions = {
   collistData ({ commit }) {
-    $.get(root.baseurl + 'api/column/getCol',{},function(_d){
-      if(_d.code == 1){
-        commit(types.COLUMN_LIST_DATA,_d.data)
-      }
 
-    })
+    Vue.http.get(root.baseurl + 'api/categories').then(function (_d) {
+      commit(types.COLUMN_LIST_DATA,_d.body)
+      console.log('get categories success')
+    }, function () {
+      console.log('get categories error')
+    });
   },
   deleteCol({ commit },obj){
     //console.log(obj)

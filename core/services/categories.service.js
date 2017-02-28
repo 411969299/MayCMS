@@ -17,9 +17,9 @@ exports.all = function (callback) {
     callback(null, _.cloneDeep(categoriesCache));
   } else {
     categoriesModel.find({})
-      .select('categorieID parentId type name seotitle content creatdate updated path isShow sort model views keywords description mixed')
-      .populate('model', 'type name description mixed system extensions')
-      .lean()
+      .select('parentId type name seotitle content creatdate updated path isShow sort model views keywords description mixed')
+      //.populate('model', 'type name description mixed system extensions')
+      //.lean()
       .exec(function (err, categories) {
         if (err) {
           err.type = 'database';

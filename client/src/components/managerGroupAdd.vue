@@ -106,13 +106,11 @@ export default {
               confirmButtonText: '确定',
               type:'success'
             });
-            console.log('保存角色成功')
           }, function () {
             MessageBox.alert('保存角色失败', '错误信息', {
               confirmButtonText: '确定',
               type:'error'
             });
-            console.log('保存角色失败')
           });
       } else {
         me.$http.post(root.baseurl+'api/roles', role)

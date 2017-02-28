@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var ShortId = require('shortid');
+var logger = require('../../lib/logger.lib');
 var categoriesService = require('../services/categories.service');
 
 /**
@@ -10,7 +11,6 @@ var categoriesService = require('../services/categories.service');
  */
 exports.query = function (req, res) {
   var query = req.query;
-  console.log(query)
   if (!_.isEmpty(query)) {
     categoriesService.one(query, function (err, category) {
       if (err) {
@@ -109,7 +109,7 @@ exports.create = function (req, res) {
             options: [true],
             errorMessage: 'path 不能为空'
           },
-          isString: { errorMessage: 'path 需为布尔值' }
+          isString: { errorMessage: 'path 需为字符串' }
         },
         'views.layout': {
           notEmpty: {

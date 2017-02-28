@@ -4,8 +4,7 @@ var mongoose = require('mongoose');
  * 栏目模型
  */
 var categoriesSchema = new mongoose.Schema({
-  //当前分类ID
-  categorieID:{type:String,default:'0'},
+
   //父ID
   parentId: {type:String,default:'0'},
   // 类型

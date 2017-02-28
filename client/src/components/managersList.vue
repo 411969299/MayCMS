@@ -13,7 +13,7 @@
                   <th>级别</th>
                   <th>频道</th>
                   <th>登录时间</th>
-                  <th>登录IP</th>
+                  <th>登录ID</th>
                   <th>管理项</th>
                 </tr>
                 </thead>
@@ -24,8 +24,8 @@
                   <td>超级管理员</td>
                   <td>所有频道</td>
                   <td>{{key.lastlogintime}}</td>
-                  <td>22222</td>
-                  <td><a  @click="updataUserFun(key.userid)">更改</a>|<a @click="deleteUserFun(key.userid)">删除</a>|<a @click="userArtFun(key.userid)">文档</a></td>
+                  <td>{{key._id}}</td>
+                  <td><router-link :to="{ name: 'managerAdd', params: { userID: key._id }}">修改</router-link>|<a @click="deleteUserFun(key._id)">删除</a>|<router-link :to="{ name: 'mydocList', params: { userID: key._id }}">文档</router-link></td>
                 </tr>
                 </tbody>
               </table>
@@ -52,7 +52,6 @@ export default {
 
     },
     ['updataUserFun'](_userid){
-
     },
     ['userArtFun'](_userid){
 
