@@ -177,7 +177,7 @@
 
 import root from '../setting';
 var $ = require('jquery')
-
+import parallel from 'async/parallel'
 import { MessageBox } from 'element-ui';
 import Vue from 'vue'
 Vue.component(MessageBox.name, MessageBox)
@@ -207,14 +207,16 @@ export default {
         url:''
       }
     }
-  },methods:{
+  },
+  methods:{
     saveCategory:function(){
       var me = this
       var category = {
         type: me.type,
         name: me.name,
         isShow: me.isShow,
-        sort: parseInt(me.sort)
+        sort: parseInt(me.sort),
+        seotitle:me.seotitle
       };
 
       category.path = '/' + me.path.toLowerCase();
@@ -250,26 +252,27 @@ export default {
         case 'link':
           category['mixed.url'] = me.url;
       }
+      var _id = me.$route.params.columnId
+      if (_id) {
+        category._id = _id
 
-      if (false) {
-//        category._id = $stateParams._id;
-//
-//        $http.put('/api/categories/' + $stateParams._id, category)
-//          .then(function () {
-//            me.$emit('notification', {
-//              type: 'success',
-//              message: '保存分类成功'
-//            });
-//
-//            me.$emit('mainCategoriesUpdate');
-//
-//            $state.go('main.categories', null, { reload: 'main.categories' });
-//          }, function () {
-//            me.$emit('notification', {
-//              type: 'danger',
-//              message: '保存分类失败'
-//            });
-//          });
+        me.$http.put(root.baseurl+'api/categories/' + _id, category)
+          .then(function () {
+            MessageBox.alert('保存分类成功', '提示信息', {
+              confirmButtonText: '确定',
+              type:'success',
+              callback:function(){
+                me.$route.replace('columnList')
+              }
+            });
+
+            //$state.go('main.categories', null, { reload: 'main.categories' });
+          }, function () {
+            MessageBox.alert('保存分类失败', '错误信息', {
+              confirmButtonText: '确定',
+              type:'error'
+            });
+          });
       } else {
         this.$http.post(root.baseurl+'api/categories', category)
           .then(function () {
@@ -292,22 +295,81 @@ export default {
   computed:{
   },
 created:function (){
+  var me = this
+  parallel({
+    viewfiles: function (callback) {
+//      $http.get('/api/views')
+//        .then(function (res) {
+//          callback(null, res.data);
+//        }, function (res) {
+//          callback(res.data);
+//        });
+      callback(null)
+    },
+    category: function (callback) {
+      var _id = me.$route.params.columnId
+      if (_id) {
+        me.$http.get(root.baseurl+'api/categories/' + _id)
+          .then(function (res) {
+            var data = res.body;
+            console.log(res)
+            if (data) {
+              callback(null, data)
+            } else {
+              //$state.go('main.categories');
+              console.log('获取栏目信息数据错误1')
+            }
+          }, function (res) {
+            console.log('获取栏目信息错误2')
+            callback(res)
 
-  var type = this.$route.query.type
-  if(type && type == 'updateCol'){
-    var d = this.$route.query.coldata;
-    this.colid = d.colid
-    this.type = d.type,
-      this.colname = d.colname,
-      this.rank = d.rank,
-      this.colrule = d.colrule,
-      this.colpath = d.colpath,
-      this.colprop = d.colprop,
-      this.seotitle = d.seotitle,
-      this.keywords = d.keywords,
-      this.description = d.description,
-      this.content = d.content
-  }
+          });
+      } else {
+        callback(null);
+      }
+    }
+  },function(err, results){
+    if (err) {
+      console.log(err)
+      return false;
+    }
+    if(results.viewfiles){
+      me.viewfiles = results.viewfiles;
+    }
+
+    me.views.layout = 'layout-default';
+    me.views.channel = 'channel-default';
+    me.views.column = 'column-default';
+    me.views.content = 'content-default';
+    me.views.page = 'page-default';
+
+    if (results.category) {
+      me.type = results.category.type;
+      me.name = results.category.name;
+      me.seotitle = results.category.seotitle;
+      me.path = /[A-z0-9\_\-]+$/.exec(results.category.path)[0];
+
+      me.isShow = results.category.isShow;
+      me.sort = results.category.sort;
+      me.model = results.category.model && results.category.model._id || '';
+      if (results.category.views) {
+        me.views.layout = results.category.views.layout || 'layout-default';
+        me.views.channel = results.category.views.channel || 'channel-default';
+        me.views.column = results.category.views.column || 'column-default';
+        me.views.content = results.category.views.content || 'content-default';
+        me.views.page = results.category.views.page || 'page-default';
+      }
+      me.keywords = results.category.keywords || '';
+      me.description = results.category.description || '';
+
+      if (results.category.mixed) {
+        me.pageSize = results.category.mixed.pageSize;
+        me.url = results.category.mixed.url || '';
+        me.isEdit = !_.isEmpty(results.category.mixed) ? results.category.mixed.isEdit : true;
+      }
+    }
+
+  })
 }
 }
 </script>

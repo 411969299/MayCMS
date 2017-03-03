@@ -1,7 +1,0 @@
-[2017-02-27 16:27:09.205] [ERROR] system - D:\AppServ\www\node_vue_cms\core\controllers\roles.controller.js 参数验证失败 [ { param: '_id', message: '_id 需为 mongoId', value: '123' } ]
-[2017-02-27 16:27:25.973] [ERROR] system - D:\AppServ\www\node_vue_cms\core\controllers\roles.controller.js 参数验证失败 [ { param: '_id', message: '_id 需为 mongoId', value: '123' } ]
-[2017-02-27 19:06:46.964] [ERROR] system - D:\AppServ\www\node_vue_cms\core\controllers\admin-users.controller.js 参数验证失败 [ { param: 'email', message: 'email 不能为空', value: '' },
-  { param: 'email', message: 'email 格式不正确', value: '' },
-  { param: 'nickname', message: 'nickname 不能为空', value: '' },
-  { param: 'password', message: 'password 不能为空', value: '' },
-  { param: 'password', message: 'password 不能小于 6 位', value: '' } ]

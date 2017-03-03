@@ -54,7 +54,7 @@ export default {
       .then(function (res) {
         var data = res.body;
         me.grouplist = data
-      }, function () {
+      }, function (_e) {
         MessageBox.alert('获取角色失败', '错误信息', {
           confirmButtonText: '确定'
         });

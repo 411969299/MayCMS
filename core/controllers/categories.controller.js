@@ -52,7 +52,6 @@ exports.one = function (req, res) {
   }
 
   var _id = req.params._id;
-
   categoriesService.one({ _id: _id }, function (err, category) {
     if (err) {
       logger[err.type]().error(err);
@@ -257,7 +256,8 @@ exports.create = function (req, res) {
     type: req.body.type,
     name: req.body.name,
     isShow: req.body.isShow,
-    sort: req.body.sort
+    sort: req.body.sort,
+    seotitle:req.body.seotitle
   };
 
   switch (req.body.type) {
@@ -315,6 +315,7 @@ exports.create = function (req, res) {
  * @param {Object} res
  */
 exports.update = function (req, res) {
+
   req.checkParams({
     '_id': {
       notEmpty: {
@@ -459,6 +460,7 @@ exports.update = function (req, res) {
 
   if (req.body.type) data.type = req.body.type;
   if (req.body.name) data.name = req.body.name;
+  if (req.body.seotitle) data.seotitle = req.body.seotitle;
   if (_.isBoolean(req.body.isShow)) data.isShow = req.body.isShow;
   if (_.isNumber(req.body.sort)) data.sort = req.body.sort;
 

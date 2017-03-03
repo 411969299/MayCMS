@@ -5,6 +5,7 @@ var categoriesModel = require('../models/categories.model');
 var contentsModel = require('../models/contents.model');
 var mediaModel = require('../models/media.model');
 var contentsService = require('../services/contents.service');
+var mongoose = require('mongoose');
 
 /**
  * 所有分类
@@ -17,7 +18,7 @@ exports.all = function (callback) {
     callback(null, _.cloneDeep(categoriesCache));
   } else {
     categoriesModel.find({})
-      .select('parentId type name seotitle content creatdate updated path isShow sort model views keywords description mixed')
+      .select('parentId type name seotitle content path isShow sort model views keywords description mixed')
       //.populate('model', 'type name description mixed system extensions')
       //.lean()
       .exec(function (err, categories) {
@@ -25,7 +26,6 @@ exports.all = function (callback) {
           err.type = 'database';
           return callback(err);
         }
-
         cache.set('categories', categories, 1000 * 60 * 60 * 24);
 
         callback(err, categories);
@@ -150,12 +150,20 @@ exports.one = function (options, callback) {
   exports.all(function (err, categories) {
     if (err) return callback(err);
 
-    var category = _(categories)
-      .map(function (category) {
-        category._id = category._id.toString();
-        return category;
-      })
-      .find(query);
+    var category = {}
+
+    for (var i=0;i<categories.length;i++){
+      if(categories[i]._id == query._id){
+        category = categories[i];
+        break;
+      }
+    }
+    //var category = _(categories)
+    //    .map(function (category) {
+    //      category._id = category._id.toString();
+    //      return category;
+    //    })
+    //    .find(query);
 
     if (category) {
       var path = '';
