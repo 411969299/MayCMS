@@ -36,6 +36,10 @@ var contentsSchema = new mongoose.Schema({
     unique: true,
     required: true
   },
+  seotitle: {
+    type: String,
+    default: ''
+  },
 
   //发布人
   user: {
@@ -49,6 +53,14 @@ var contentsSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  goodpost: {
+    type: Number,
+    default: 0
+  },  //点赞数
+  badpost: {
+    type: Number,
+    default: 0
+  },  //非点赞数
 
   //阅读量
   reading: {
@@ -97,18 +109,18 @@ var contentsSchema = new mongoose.Schema({
   },
 
   //缩略图
-  thumbnail: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Media'
-  },
-
-  //媒体
-  media: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Media'
-    }
-  ],
+  //thumbnail: {
+  //  type: mongoose.Schema.Types.ObjectId,
+  //  ref: 'Media'
+  //},
+  //
+  ////媒体
+  //media: [
+  //  {
+  //    type: mongoose.Schema.Types.ObjectId,
+  //    ref: 'Media'
+  //  }
+  //],
 
   //摘要
   abstract: String,
@@ -118,6 +130,7 @@ var contentsSchema = new mongoose.Schema({
 
   //标签
   tags: [String],
+  flag: Array,  //自定义属性集合
 
   // 扩展
   extensions: mongoose.Schema.Types.Mixed

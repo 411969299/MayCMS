@@ -108,18 +108,18 @@ module.exports = {
     },
 
     // 内容
-    //'/article': {
-    //  get: [100200, 'article.list'],
-    //  post: [100201, 'article.create'],
-    //  put: [100201, 'article.update'],
-    //  delete: [100201, 'article.remove'],
-    //
-    //  '/:article': {
-    //    get: [100200, 'article.one'],
-    //    put: [100201, 'article.update'],
-    //    delete: [100201, 'article.remove']
-    //  }
-    //},
+    '/contents': {
+      get: [100200, 'contents.list'],
+      post: [100201, 'contents.create'],
+      put: [100201, 'contents.update'],
+      delete: [100201, 'contents.remove'],
+
+      '/:content': {
+        get: [100200, 'contents.one'],
+        put: [100201, 'contents.update'],
+        delete: [100201, 'contents.remove']
+      }
+    },
 
     // 单页
     //'/pages/:page': {

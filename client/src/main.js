@@ -38,7 +38,15 @@ router.beforeEach((to,from,next) => {
 /* eslint-disable no-new */
 
 
-//VueRouter.start(App, '#BODYMAIN')
+Vue.http.interceptors.push(function(request, next){
+  next(function(response){
+    if(response.body.error && response.body.error.code == "NOT_LOGGED_IN"){
+      router.push({name:'login'})
+      //console.log({VueRouter})
+    }
+  })
+})
+
 const app = new Vue({
   router,store
 }).$mount('#BODYMAIN')

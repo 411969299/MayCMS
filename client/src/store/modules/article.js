@@ -1,5 +1,5 @@
 
-var $ = require('jquery')
+import Vue from 'vue'
 import root from '../../setting';
 
 import * as types from '../mutation-types'
@@ -19,10 +19,12 @@ const getters = {
 // actions
 const actions = {
   artlistData ({ commit },obj){
-    $.post(root.baseurl + 'api/article/getallArt',obj,function(_d){
-      if(_d.code == 1){
-        commit(types.ARTICLE_LIST_DATA,_d.data)
-      }
+    Vue.http.post(root.baseurl + 'api/contents',obj).then(function(_d){
+      console.log(_d)
+      commit(types.ARTICLE_LIST_DATA,_d)
+    },function(err){
+      console.log(err)
+      console.log('获取文章列表失败')
     })
   },
   //artlistData ({ commit },obj){
@@ -34,10 +36,11 @@ const actions = {
   //},
   deleteArt({ commit },obj){
     //console.log(obj)
-    $.post(root.baseurl + 'api/article/deleteArt',obj,function(_d){
-      if(_d.code == 1){
-        commit(types.DELETE_ARTICLE_DATA,obj)
-      }
+    Vue.http.post(root.baseurl + 'api/article/deleteArt',obj).then(function(_d){
+      commit(types.DELETE_ARTICLE_DATA,obj)
+    },function(err){
+      console.log(err)
+      console.log('删除文章列表失败')
     })
   }
 }

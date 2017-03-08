@@ -101,7 +101,8 @@ export default {
   name: 'articleAllList',
   data () {
     return {
-
+      currentPage:1,
+      totalPages:1
     }
   },
   methods: {
@@ -141,7 +142,7 @@ export default {
   created:function(){
     //console.log(this.$router)
 
-    this.$store.dispatch('artlistData',{})  //"artid":"BJ_MJNore"
+    this.$store.dispatch('artlistData',{ deleted: false, currentPage: this.currentPage, pageSize: 20 })  //"artid":"BJ_MJNore"
   }
 }
 </script>

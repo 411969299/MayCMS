@@ -33,7 +33,6 @@ const actions = {
 
     Vue.http.get(root.baseurl + 'api/categories').then(function (_d) {
       commit(types.COLUMN_LIST_DATA,_d.body)
-      console.log('get categories success')
     }, function () {
       console.log('get categories error')
     });
