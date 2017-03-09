@@ -29,9 +29,13 @@ const getters = {
 
 // actions
 const actions = {
-  collistData ({ commit }) {
-
-    Vue.http.get(root.baseurl + 'api/categories').then(function (_d) {
+  collistData ({ commit },_obj) {
+    var obj = ''
+    if(_obj && _obj.type && _obj.type !=''){
+      obj += '?type='+_obj.type
+    }
+    Vue.http.get(root.baseurl + 'api/categories'+obj).then(function (_d) {
+      console.log(_d.body)
       commit(types.COLUMN_LIST_DATA,_d.body)
     }, function () {
       console.log('get categories error')

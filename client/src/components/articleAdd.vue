@@ -11,8 +11,8 @@
               </div>
               <div class="addArticle_tap">
                 <ul class="nav nav-tabs" role="tablist">
-                  <li role="presentation"  @click="changeView(0)"  :class="currViewIndex==0?'active':''"><a>常规选项</a></li>
-                  <li role="presentation" @click="changeView(1)"  :class="currViewIndex==1?'active':''"><a>高级选项</a></li>
+                  <li role="presentation"  @click="currViewIndex=0"  :class="currViewIndex==0?'active':''"><a>常规选项</a></li>
+                  <li role="presentation" @click="currViewIndex=1"  :class="currViewIndex==1?'active':''"><a>高级选项</a></li>
                 </ul>
               </div>
               <div class="addArticle_tap_con">
@@ -62,16 +62,16 @@
                   <div class="row">
                     <div class="col-md-1">TAG标签</div>
                     <div class="col-md-4">
-                      <input type="text" class="form-control"  v-model="tag">
+                      <input type="text" class="form-control"  v-model="tags">
                     </div>
                     <div class="col-md-2">多个标签用英文逗号(,)隔开</div>
                   </div>
-                  <div class="row">
-                    <div class="col-md-1">权重</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control"  v-model="rank" >
-                    </div>
-                  </div>
+                  <!--<div class="row">-->
+                    <!--<div class="col-md-1">权重</div>-->
+                    <!--<div class="col-md-2">-->
+                      <!--<input type="text" class="form-control"  v-model="rank" >-->
+                    <!--</div>-->
+                  <!--</div>-->
                   <div class="row">
                     <div class="col-md-1">缩略图</div>
                     <div class="col-md-2">
@@ -83,17 +83,20 @@
                     <div class="col-md-2">
                       <input type="text" class="form-control"  v-model="source">
                     </div>
-                    <div class="col-md-1">作者：</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control"  v-model="writer">
-                    </div>
+                    <!--<div class="col-md-1">作者：</div>-->
+                    <!--<div class="col-md-2">-->
+                      <!--<input type="text" class="form-control"  v-model="writer">-->
+                    <!--</div>-->
                   </div>
                   <div class="row">
                     <div class="col-md-1">文章主栏目</div>
                     <div class="col-md-2">
-                      <select name="" id="" class="form-control"  v-model="columnId"><!--multiple-->
-                        <option v-for="option in collist" :value="option.value">
-                          {{ option.title }}
+                      <select name="" id="" class="form-control"  v-model="category"><!--multiple-->
+                        <option value="0">
+                          请选择栏目
+                        </option>
+                        <option v-for="option in collist" :value="option._id">
+                          {{ option.name }}
                         </option>
                       </select>
                     </div>
@@ -121,23 +124,23 @@
                         <input type="radio" name="pl" checked>禁止评论
                       </label>
                     </div>
-                    <div class="col-md-1">浏览次数</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control"  v-model="click">
-                    </div>
+                    <!--<div class="col-md-1">浏览次数</div>-->
+                    <!--<div class="col-md-2">-->
+                      <!--<input type="text" class="form-control"  v-model="click">-->
+                    <!--</div>-->
                   </div>
                   <div class="row">
                     <div class="col-md-1">文章排序</div>
                     <div class="col-md-2">
-                      <input type="text" class="form-control"  >
+                      <input type="text" class="form-control"  v-model="sort" >
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-md-1">阅读权限</div>
-                    <div class="col-md-2">
-                      <input type="text" class="form-control" >
-                    </div>
-                  </div>
+                  <!--<div class="row">-->
+                    <!--<div class="col-md-1">阅读权限</div>-->
+                    <!--<div class="col-md-2">-->
+                      <!--<input type="text" class="form-control" >-->
+                    <!--</div>-->
+                  <!--</div>-->
                   <div class="row">
                     <div class="col-md-1">自定义文件名</div>
                     <div class="col-md-2">
@@ -153,7 +156,7 @@
                   <div class="row">
                     <div class="col-md-1">文章摘要</div>
                     <div class="col-md-5">
-                      <textarea  class="form-control"  v-model="description" cols="30" rows="10"></textarea>
+                      <textarea  class="form-control"  v-model="abstract" cols="30" rows="10"></textarea>
                       <!--<input type="text" class="form-control"  v-model="description">-->
                     </div>
                   </div>
@@ -171,77 +174,140 @@
 
 <script>
   import root from '../setting';
+  var moment = require('moment')
   var $ = require('jquery')
+
+  import { MessageBox } from 'element-ui';
+  import Vue from 'vue'
+  Vue.component(MessageBox.name, MessageBox)
 
 export default {
   name: 'articleAdd',
   data () {
     return {
-      cvi:0,
-      artid:'',
+      currViewIndex:0,
+      status:'draft',//'draft'草稿 'pushed' 发布
+      deleted:false, //是否放入回收站
+      sort:0,  //文章排序
+      category:'0',  //所属栏目ID
       title:'',
       shorttitle: '',
-      writer: '',
-      description: '',
+      alias:'aaaa',//别名
+      user: '',  //ObjectId
+      date:'',
+      abstract: '',//摘要
+      content:'',//内容
       keywords: '',
-      seotitle: '',
       source: '',  //来源
       flag: [],  //自定义属性// ['h','c','f','a','s','b','p','j']
-      rank: '',
-      tag: '',
-      click: '',  //点击量
-      columnName: '',
-      content:'',
-      goodpost: 0,  //点赞数
-      badpost: 0,  //非点赞数
-      columnId:''  //所属栏目ID
+      tags: '',
+      thumbnail:'',//ObjectId 缩略图
+      media:'' //ObjectId 媒体
+      //collist:[]//栏目列表数据
     }
   },
   methods:{
-    changeView:function(_dom){
-      this.cvi = _dom
+    msgAlert:function(_obj){
+      MessageBox.alert(_obj.msg, '提示信息', {
+        confirmButtonText: '确定',
+        type:_obj.type
+      })
     },
     submitData:function(){
+      var me = this
       var obj = {
+        status:this.status,
+        deleted:this.deleted,
+        sort:this.sort,
         title:this.title,
         shorttitle: this.shorttitle,
-        writer: this.writer,
-        description: this.description,
+        alias:this.alias,
+        user: this.user,
+        date:moment().format('YYYY-MM-DD HH:mm'),
         keywords: this.keywords,
-        seotitle: this.seotitle,
         source: this.source,  //来源
         flag: this.flag,  //自定义属性
-        rank: this.rank,
-        tag: this.tag,
-        click: this.click,  //点击量
-        columnName: '',
-        content:this.content,
-        columnId:this.columnId  //所属栏目ID
+        tags: this.tags,
+        category:this.category  //所属栏目ID
       }
-      this.collist.some(function(d){
-        if(d.value == obj.columnId){
-          obj.columnName = d.title
-          return !0
-        }
-      })
-      console.log()
 
-      var type  = this.$route.query.type;
-      if(type == 'updateArt'){
-        obj.artid = this.artid
-        $.post(root.baseurl + 'api/article/updateArt',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
-          if(_d.code == 1){
-          this.$router.push({name:'alldocList'})
-        }
+
+      this.$http.post(root.baseurl + 'api/contents',obj).then(function(_d){
+        console.log(_d)
+        me.$router.push({name:'alldocList'})
+      },function(_err){
+        console.log(_err)
       })
-      }else{
-        $.post(root.baseurl + 'api/article/addArticle',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
-          if(_d.code == 1){
-          this.$router.push({name:'alldocList'})
-        }
-        //console.log(_d)
-      })
+
+//      if ($scope.thumbnail._id) content.thumbnail = $scope.thumbnail._id;
+//      if (!_.isEmpty($scope.media)) content.media = _.map($scope.media, '_id');
+
+      if (this.abstract !== '' || this.abstract !== undefined) {
+        obj.abstract = this.abstract;
       }
+
+      if (this.content !== '' || this.content !== undefined) {
+        obj.content = this.content;
+      }
+
+      if (this.tags !== '' && this.tags !== undefined) {
+        var tags = this.tags
+        tags = tags.replace(/，| /g, ',');
+        obj.tags = tags.split(',');
+      }
+      console.log(obj)
+//      if (!$.isEmptyObject($scope.extensions)) {
+//        content.extensions = $scope.extensions;
+//      }
+
+//      if ($stateParams.content) {
+//        $http.put('/api/contents/' + $stateParams.content, content)
+//          .then(function () {
+//            $scope.$emit('notification', {
+//              type: 'success',
+//              message: '修改内容成功'
+//            });
+//
+//            $state.go('main.contents', { category: $scope.$parent.category._id }, { reload: 'main.contents' });
+//          });
+//      } else {
+//
+//      }
+
+      this.$http.post(root.baseurl+'api/contents', obj)
+        .then(function (res) {
+          var msg = ''
+          if (me.status === 'draft') {
+            msg = '保存草稿成功'
+          } else if (me.status === 'pushed') {
+            msg = '发布内容成功'
+          }
+          me.msgAlert({
+            msg:msg,
+            type:'success'
+          })
+
+          //$state.go('main.contents', { category: $scope.$parent.category._id }, { reload: 'main.contents' });
+        }, function () {
+          me.msgAlert({
+            msg:'发布内容失败',
+            type:'error'
+          })
+        });
+
+
+//      var type  = this.$route.query.type;
+//      if(type == 'updateArt'){
+//        obj.artid = this.artid
+//        $.post(root.baseurl + 'api/article/updateArt',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
+//          if(_d.code == 1){
+//          me.$router.push({name:'alldocList'})
+//        }
+//      })
+//      }else{
+//
+//
+//      }
 
 
     },
@@ -250,17 +316,15 @@ export default {
     }
   },
   computed:{
-    currViewIndex:function(){
-      return this.cvi
-    },
-    collist () { //  转化数据结构
-      return this.$store.getters.getconvercol
+    collist () {
+      return this.$store.getters.getcolumnList
     },
     selectdata(){
 
     }
   },
   created:function (){
+    this.$store.dispatch('collistData',{type:'column'})
     var artdata = this.$router.artData
     if(artdata){
       this.artid = artdata.artid,

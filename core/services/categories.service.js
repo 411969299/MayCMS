@@ -140,7 +140,7 @@ exports.navigation = function (options, callback) {
  *        {String} options.type
  * @param {Function} callback
  */
-exports.one = function (options, callback) {
+exports.one_byid = function (options, callback) {
   var query = {};
 
   if (options._id) query._id = options._id;
@@ -194,6 +194,30 @@ exports.one = function (options, callback) {
       callback(null, category);
     } else {
       callback(null, null);
+    }
+  });
+};
+
+exports.one = function (options, callback) {
+  var query = {};
+
+  if (options._id) query._id = options._id;
+  if (options.path) query.path = options.path;
+  if (options.type) query.type = options.type;
+
+  exports.all(function (err, categories) {
+    if (err) return callback(err);
+    var category =  _.map(categories,function (category) {
+      category._id = category._id.toString();
+      return category;
+    })
+
+    category = _.filter(category,query)
+
+    if (category && category.length>0) {
+      callback(null, category);
+    } else {
+      callback('查询栏目数据错误', null);
     }
   });
 };

@@ -399,20 +399,20 @@ exports.save = function (options, callback) {
     });
   } else {
     async.auto({
-      checkAlias: function (callback) {
-        exports.checkAlias({ alias: data.alias }, function (err, alias) {
-          if (err) callback(err);
-
-          data.alias = alias;
-
-          callback();
-        });
-      },
-      saveContent: ['checkAlias', function (callback) {
+      //checkAlias: function (callback) {
+      //  exports.checkAlias({ alias: data.alias }, function (err, alias) {
+      //    if (err) callback(err);
+      //
+      //    data.alias = alias;
+      //
+      //    callback();
+      //  });
+      //},
+      saveContent:function (callback) {
         new contentsModel(data).save(function (err, content) {
           callback(err, content);
         });
-      }],
+      },
       updateMedia: ['saveContent', function (callback, results) {
         if (data.thumbnail) {
           data.media = data.media || [];

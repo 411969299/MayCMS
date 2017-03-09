@@ -52,7 +52,7 @@ exports.one = function (req, res) {
   }
 
   var _id = req.params._id;
-  categoriesService.one({ _id: _id }, function (err, category) {
+  categoriesService.one_byid({ _id: _id }, function (err, category) {
     if (err) {
       logger[err.type]().error(err);
       return res.status(500).end();

@@ -33,10 +33,10 @@ var contentsSchema = new mongoose.Schema({
   //别名
   alias: {
     type: String,
-    unique: true,
+    //unique: true,  //唯一
     required: true
   },
-  seotitle: {
+  shorttitle: {
     type: String,
     default: ''
   },
@@ -47,6 +47,7 @@ var contentsSchema = new mongoose.Schema({
     ref: 'Users',
     required: true
   },
+  source:String,  //文章来源
 
   //日期
   date: {
@@ -130,7 +131,7 @@ var contentsSchema = new mongoose.Schema({
 
   //标签
   tags: [String],
-  flag: Array,  //自定义属性集合
+  flag: [String],  //自定义属性集合
 
   // 扩展
   extensions: mongoose.Schema.Types.Mixed
