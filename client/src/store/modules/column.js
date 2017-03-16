@@ -12,19 +12,7 @@ const state = {
 
 // getters
 const getters = {
-  getcolumnList: state => state.columnListData,
-  getconvercol:state => {
-    let arr = []
-    state.columnListData.map(function(c,i){
-      arr.push({title:c.colname,value:c.colid})
-      if(c.childCol.length && c.childCol.length > 0){
-        c.childCol.map(function(cd,ci){
-          arr.push({title:cd.colname,value:cd.colid})
-        })
-      }
-    })
-    return arr
-  }
+  getcolumnList: state => state.columnListData
 }
 
 // actions
@@ -35,7 +23,7 @@ const actions = {
       obj += '?type='+_obj.type
     }
     Vue.http.get(root.baseurl + 'api/categories'+obj).then(function (_d) {
-      console.log(_d.body)
+      //console.log(_d.body)
       commit(types.COLUMN_LIST_DATA,_d.body)
     }, function () {
       console.log('get categories error')

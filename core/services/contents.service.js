@@ -28,11 +28,11 @@ exports.one = function (options, callback) {
   if (_.isBoolean(options.markdown)) markdown = options.markdown;
 
   contentsModel.findOne(query)
-    .select('status category title alias user date reading thumbnail media abstract content tags extensions')
+    .select('status category title shorttitle user date reading keywords abstract source content tags flag extensions')
     .populate('category', 'name path')
-    .populate('thumbnail', 'fileName description date src')
+    //.populate('thumbnail', 'fileName description date src')
     .populate('user', 'nickname email')
-    .populate('media', 'fileName description date src')
+    //.populate('media', 'fileName description date src')
     .exec(function (err, content) {
       if (err) {
         err.type = 'database';
@@ -59,21 +59,23 @@ exports.one = function (options, callback) {
           }
         },
         function (reading, callback) {
-          if (content.thumbnail) var thumbnailSrc = content.thumbnail.src;
-          if (!_.isEmpty(content.media)) var meiaSrc = _.map(content.media, 'src');
-
+          //if (content.thumbnail) var thumbnailSrc = content.thumbnail.src;
+          //if (!_.isEmpty(content.media)) var meiaSrc = _.map(content.media, 'src');
+          //
           content = content.toObject();
-          if (_.get(content, 'category.path')) content.url = content.category.path + '/' + content.alias;
+          //if (_.get(content, 'category.path')) content.url = content.category.path + '/' + content.alias;
+          //
+          //
+          //if (content.content && !markdown) content.content = marked(content.content);
+          //
+          //if (content.thumbnail) content.thumbnail.src = thumbnailSrc;
+          //if (!_.isEmpty(content.media)) {
+          //  _.forEach(content.media, function (medium, index) {
+          //    medium.src = meiaSrc[index];
+          //  });
+          //}
 
           if (reading) content.reading = reading;
-          if (content.content && !markdown) content.content = marked(content.content);
-
-          if (content.thumbnail) content.thumbnail.src = thumbnailSrc;
-          if (!_.isEmpty(content.media)) {
-            _.forEach(content.media, function (medium, index) {
-              medium.src = meiaSrc[index];
-            });
-          }
 
           delete content.category;
 
@@ -130,28 +132,28 @@ exports.list = function (options, callback) {
         .sort('status -date')
         .skip((currentPage - 1) * pageSize)
         .limit(pageSize)
-        .select('status category title alias user date reading thumbnail abstract')
+        .select('status category title user updated reading  abstract ')
         .populate('category', 'name path')
         .populate('user', 'nickname email')
-        .populate('thumbnail', 'fileName description date src')
+        //.populate('thumbnail', 'fileName description date src')
         .exec(function (err, contents) {
           if (err) {
             err.type = 'database';
             return callback(err);
           }
 
-          contents = _.map(contents, function (content) {
-            if (content.thumbnail) var thumbnailSrc = content.thumbnail.src;
-
-            content = content.toObject();
-            if (_.get(content, 'category.path')) content.url = content.category.path + '/' + content.alias;
-
-            if (content.thumbnail) content.thumbnail.src = thumbnailSrc;
-
-            delete content.alias;
-
-            return content;
-          });
+          //contents = _.map(contents, function (content) {
+          //  if (content.thumbnail) var thumbnailSrc = content.thumbnail.src;
+          //
+          //  content = content.toObject();
+          //  if (_.get(content, 'category.path')) content.url = content.category.path + '/' + content.alias;
+          //
+          //  if (content.thumbnail) content.thumbnail.src = thumbnailSrc;
+          //
+          //  delete content.alias;
+          //
+          //  return content;
+          //});
 
           callback(null, count, contents);
         });
@@ -161,7 +163,8 @@ exports.list = function (options, callback) {
 
     var result = {
       contents: contents,
-      pages: Math.ceil(count / pageSize)
+      counts:count,
+      pages: Math.ceil(count / pageSize)  //总页数
     };
 
     callback(err, result);
@@ -412,20 +415,20 @@ exports.save = function (options, callback) {
         new contentsModel(data).save(function (err, content) {
           callback(err, content);
         });
-      },
-      updateMedia: ['saveContent', function (callback, results) {
-        if (data.thumbnail) {
-          data.media = data.media || [];
-          data.media.push(data.thumbnail);
-        }
-
-        mediaModel.update({ _id: { $in: _.uniq(data.media) } }, { $addToSet: { quotes: results.saveContent._id } }, {
-          multi: true,
-          runValidators: true
-        }, function (err) {
-          callback(err);
-        });
-      }]
+      }
+      //updateMedia: ['saveContent', function (callback, results) {
+      //  if (data.thumbnail) {
+      //    data.media = data.media || [];
+      //    data.media.push(data.thumbnail);
+      //  }
+      //
+      //  mediaModel.update({ _id: { $in: _.uniq(data.media) } }, { $addToSet: { quotes: results.saveContent._id } }, {
+      //    multi: true,
+      //    runValidators: true
+      //  }, function (err) {
+      //    callback(err);
+      //  });
+      //}]
     }, function (err) {
       if (err) {
         err.type = 'database';

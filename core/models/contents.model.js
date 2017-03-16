@@ -31,11 +31,11 @@ var contentsSchema = new mongoose.Schema({
   },
 
   //别名
-  alias: {
-    type: String,
-    //unique: true,  //唯一
-    required: true
-  },
+  //alias: {
+  //  type: String,
+  //  //unique: true,  //唯一
+  //  required: true
+  //},
   shorttitle: {
     type: String,
     default: ''
@@ -51,6 +51,10 @@ var contentsSchema = new mongoose.Schema({
 
   //日期
   date: {
+    type: Date,
+    default: Date.now
+  },
+  updated:{  //最后修改日期
     type: Date,
     default: Date.now
   },

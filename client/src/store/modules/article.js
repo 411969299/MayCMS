@@ -19,9 +19,9 @@ const getters = {
 // actions
 const actions = {
   artlistData ({ commit },obj){
-    Vue.http.post(root.baseurl + 'api/contents',obj).then(function(_d){
-      console.log(_d)
-      commit(types.ARTICLE_LIST_DATA,_d)
+    Vue.http.get(root.baseurl + 'api/contents',obj).then(function(_d){
+
+      commit(types.ARTICLE_LIST_DATA,_d.body)
     },function(err){
       console.log(err)
       console.log('获取文章列表失败')

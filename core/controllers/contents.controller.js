@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var logger = require('../../lib/logger.lib');
 var contentsService = require('../services/contents.service');
-
+var moment = require('moment');
 /**
  * 单条内容
  * @param {Object} req
@@ -144,11 +144,16 @@ exports.create = function (req, res) {
       isString: { errorMessage: 'title 需为字符串' }
     },
     'date': {
-      notEmpty: {
-        options: [true],
-        errorMessage: 'date 不能为空'
-      },
-      isDate: { errorMessage: 'date 需为日期' }
+      custom: {
+        options: [function (value) {
+          if (value != '' && moment(value).isValid()) {
+            return true;
+          } else {
+            return false;
+          }
+        }],
+        errorMessage: 'data 日期格式错误'
+      }
     },
     //'thumbnail': {
     //  optional: true,
@@ -191,14 +196,17 @@ exports.create = function (req, res) {
     status: req.body.status,
     category: req.body.category,
     title: req.body.title,
-    alias: req.body.alias,
+    shorttitle:req.body.shorttitle,
+    //alias: req.body.alias,
     user: req.session.user,
     date: req.body.date,
+    updated:req.body.date,
     //thumbnail: req.body.thumbnail,
     //media: req.body.media || [],
     abstract: req.body.abstract,
     content: req.body.content,
     tags: req.body.tags || [],
+    flag: req.body.flag || [],
     extensions: req.body.extensions || {}
   };
 

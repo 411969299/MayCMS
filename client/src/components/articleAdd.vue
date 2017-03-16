@@ -186,13 +186,13 @@ export default {
   data () {
     return {
       currViewIndex:0,
+      category:0,
       status:'draft',//'draft'草稿 'pushed' 发布
       deleted:false, //是否放入回收站
       sort:0,  //文章排序
-      category:'0',  //所属栏目ID
       title:'',
       shorttitle: '',
-      alias:'aaaa',//别名
+      //alias:'aaaa',//别名
       user: '',  //ObjectId
       date:'',
       abstract: '',//摘要
@@ -221,9 +221,9 @@ export default {
         sort:this.sort,
         title:this.title,
         shorttitle: this.shorttitle,
-        alias:this.alias,
         user: this.user,
-        date:moment().format('YYYY-MM-DD HH:mm'),
+        //date:moment().format('YYYY-MM-DD HH:mm:ss'),
+        date: parseInt(moment().format('x')),
         keywords: this.keywords,
         source: this.source,  //来源
         flag: this.flag,  //自定义属性
@@ -231,17 +231,12 @@ export default {
         category:this.category  //所属栏目ID
       }
 
-
-      this.$http.post(root.baseurl + 'api/contents',obj).then(function(_d){
-        console.log(_d)
-        me.$router.push({name:'alldocList'})
-      },function(_err){
-        console.log(_err)
-      })
-
 //      if ($scope.thumbnail._id) content.thumbnail = $scope.thumbnail._id;
 //      if (!_.isEmpty($scope.media)) content.media = _.map($scope.media, '_id');
-
+      if(this.category==0){
+        console.log('请选择栏目')
+        return
+      }
       if (this.abstract !== '' || this.abstract !== undefined) {
         obj.abstract = this.abstract;
       }
@@ -286,28 +281,12 @@ export default {
             msg:msg,
             type:'success'
           })
-
-          //$state.go('main.contents', { category: $scope.$parent.category._id }, { reload: 'main.contents' });
         }, function () {
           me.msgAlert({
             msg:'发布内容失败',
             type:'error'
           })
         });
-
-
-//      var type  = this.$route.query.type;
-//      if(type == 'updateArt'){
-//        obj.artid = this.artid
-//        $.post(root.baseurl + 'api/article/updateArt',{jsonobj:JSON.stringify(obj)},(_d) =>{//function(_d){
-//          if(_d.code == 1){
-//          me.$router.push({name:'alldocList'})
-//        }
-//      })
-//      }else{
-//
-//
-//      }
 
 
     },
@@ -324,29 +303,29 @@ export default {
     }
   },
   created:function (){
+    //console.log(moment('2017-03-16T09:16:21.492Z').format('YYYY-MM-DD HH:mm:ss'))
+
     this.$store.dispatch('collistData',{type:'column'})
-    var artdata = this.$router.artData
-    if(artdata){
-      this.artid = artdata.artid,
-      this.title = artdata.title,
-        this.shorttitle = artdata.shorttitle,
-        this.writer = artdata.writer,
-        this.description = artdata.description,
-        this.keywords = artdata.keywords,
-        this.seotitle = artdata.seotitle,
-        this.source = artdata.source,  //来源
-
-        this.flag = artdata.flag,  //自定义属性// ['h','c','f','a','s','b','p','j']
-        this.rank = artdata.rank,
-        this.tag = artdata.tag,
-        this.click = artdata.click,  //点击量
-        this.columnName = artdata.columnName,
-        this.content = artdata.content,
-        this.goodpost = artdata.goodpost,  //点赞数
-        this.badpost = artdata.badpost,  //非点赞数
-        this.columnId = artdata.columnId  //所属栏目ID
-
-      this.$router.artData = null
+    var _id = this.$route.params._id
+    var me =this
+    if(_id){
+      this.$http.get(root.baseurl+'api/contents/'+_id).then(function(_d){
+        var d = _d.body
+        me.status = d.status,
+        me.category = d.category,  //所属栏目ID
+          me.title = d.title,
+          me.shorttitle = d.shorttitle,
+          me.user = d.user,  //ObjectId
+          me.date = d.date,
+          me.abstract = d.abstract,//摘要
+          me.content = d.content,//内容
+          me.keywords = d.keywords,
+          me.source = d.source,  //来源
+          me.flag = d.flag,  //自定义属性// ['h','c','f','a','s','b','p','j']
+          me.tags = d.tags
+      },function(err){
+        console.log(err)
+      })
     }
   }
 }

@@ -19,29 +19,27 @@
               <table class="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
-                  <th>id</th>
+                  <th>序号</th>
                   <th>选择</th>
                   <th>文章标题</th>
-                  <th>更新时间</th>
                   <th>所属栏目</th>
-                  <th>点击</th>
-                  <th>权限</th>
+                  <th>阅读量</th>
+                  <th>更新时间</th>
                   <th>发布人</th>
                   <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                <tr v-for="key in artlist">
-                  <td>{{key.artid}}</td>
-                  <td><input type="checkbox"></td>
+                <tr v-for="(key,index) in artlist.contents">
+                  <td>{{index}}</td>
+                  <td><input type="checkbox" :value="key._id" v-model="checkLists"></td>
                   <td>{{key.title}}</td>
+                  <td>{{key.category.name}}</td>
+                  <td>{{key.reading.total}}</td>
                   <td>{{key.updated}}</td>
-                  <td>{{key.columnName}}</td>
-                  <td>{{key.click}}</td>
-                  <td>权限权限</td>
-                  <td>{{key.writer}}</td>
-                  <td><a  @click="updataArtFun(key.artid)">编辑</a> | <a @click="deleteArtFun(key.artid)">删除</a> | <a href="">预览</a></td>
+                  <td>{{key.user.nickname}}</td>
+                  <td><a  @click="updataArtFun(key._id)">编辑</a> | <a @click="deleteArtFun(key._id)">删除</a> | <a >预览</a></td>
                 </tr>
 
                 </tbody>
@@ -51,44 +49,50 @@
                 <div class="btn btn-default">取消</div>
                 <div class="btn btn-default">删除</div>
               </div>
-              <nav><ul class="pagination pagination-sm">
-                  <li>共100条记录</li>
-                  <li>首页</li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">&laquo;</a></li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">&raquo;</a></li>
-                </ul></nav>
-              <div class="col-md-10 col-md-offset-1">
-                <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">选择栏目</label>
-                    <div class="col-sm-2">
-                      <select name="" id="" class="form-control" >
-                        <option v-for="option in collist" :value="option.value">
-                          {{ option.title }}
-                        </option>
-                      </select>
-                    </div>
-                    <label for="" class="col-sm-2 control-label">关键字</label>
-                    <div class="col-sm-2">
-                      <input type="text" class="form-control" id="" placeholder="关键字">
-                    </div>
-                    <label for="" class="col-sm-2 control-label">排序</label>
-                    <div class="col-sm-1">
-                      <input type="text" class="form-control" id="" placeholder="排序">
-                    </div>
-                    <div class="col-sm-1">
-                      <button type="submit" class="btn btn-default">搜索</button>
-                    </div>
+              <nav aria-label="Page navigation">
+                <ul class="pagination">
+                  <li><a href="">首页</a></li>
+                  <li>
+                    <a href="#" aria-label="Previous">
+                      <span aria-hidden="true">上一页</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" aria-label="Next">
+                      <span aria-hidden="true">下一页</span>
+                    </a>
+                  </li>
+                  <li><a href="">末页</a></li>
+                  <li><a>第1页/共11页</a></li>
+                </ul>
+              </nav>
+              <!--<div class="col-md-10 col-md-offset-1" style="display: none">-->
+                <!--<form class="form-horizontal" role="form">-->
+                  <!--<div class="form-group">-->
+                    <!--<label for="" class="col-sm-2 control-label">选择栏目</label>-->
+                    <!--<div class="col-sm-2">-->
+                      <!--<select name="" id="" class="form-control" >-->
+                        <!--<option v-for="option in collist" :value="option.value">-->
+                          <!--{{ option.title }}-->
+                        <!--</option>-->
+                      <!--</select>-->
+                    <!--</div>-->
+                    <!--<label for="" class="col-sm-2 control-label">关键字</label>-->
+                    <!--<div class="col-sm-2">-->
+                      <!--<input type="text" class="form-control" id="" placeholder="关键字">-->
+                    <!--</div>-->
+                    <!--<label for="" class="col-sm-2 control-label">排序</label>-->
+                    <!--<div class="col-sm-1">-->
+                      <!--<input type="text" class="form-control" id="" placeholder="排序">-->
+                    <!--</div>-->
+                    <!--<div class="col-sm-1">-->
+                      <!--<button type="submit" class="btn btn-default">搜索</button>-->
+                    <!--</div>-->
 
-                  </div>
-                </form>
-              </div>
+                  <!--</div>-->
+                <!--</form>-->
+              <!--</div>-->
+
             </div>
 
           </div>
@@ -97,12 +101,14 @@
 
 <script>
   import * as types from '../store/mutation-types'
+  var moment = require('moment')
 export default {
   name: 'articleAllList',
   data () {
     return {
       currentPage:1,
-      totalPages:1
+      totalPages:1,
+      checkLists:[]
     }
   },
   methods: {
@@ -112,32 +118,28 @@ export default {
     ['deleteArtFun'](_artid){
       this.$store.dispatch('deleteArt',{artid:_artid})
     },
-    ['updataArtFun'](_artid){
-      var obj
-      this.artlist.some(function(d){
-        if(_artid == d.artid){
-          obj = d;
-          return !0
-        }
-      })
-      this.$router.artData = obj
-      this.$router.push({ name: 'articleAdd',query:{type:'updateArt'}})
+    ['updataArtFun'](id){
+      this.$router.push({ name: 'articleAdd',params:{_id:id}})
     }
 
   },
   computed:{
     artlist () {
-      //console.log(this.$route)  //刚开始时会执行两次，能解决么？
-      if(this.$route.name == 'alldocList'){
-        return this.$store.getters.getartList
-      }else if(this.$route.name == 'mydocList'){
-        return this.$store.getters.getartList
-      }
 
-    },
-    collist(){
-      return this.$store.getters.getconvercol
+      var arr = this.$store.getters.getartList
+      //console.log(arr)
+      if(arr.contents){
+        arr.contents.map(function(c,i){
+          c.updated = moment(c.updated).format('YYYY-MM-DD HH:mm:ss')
+          return c
+        })
+      }
+      return arr
     }
+//    collist(){
+//      console.log(this.$store.getters.getcolumnList)
+//      return this.$store.getters.getcolumnList
+//    }
   },
   created:function(){
     //console.log(this.$router)
